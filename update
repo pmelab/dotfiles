@@ -1,0 +1,5 @@
+#!/bin/bash
+cd ~/.dotfiles/nix
+nix flake update --impure --commit-lock-file
+cd ~/.dotfiles/npm
+npm update

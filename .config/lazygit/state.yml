@@ -1,0 +1,35 @@
+lastupdatecheck: 1712942431
+recentrepos:
+    - /Users/pmelab/.dotfiles
+    - /Users/pmelab/Code/silverback-template
+    - /Users/pmelab/Code/PAR/dev
+    - /Users/pmelab/Code/PAR/release
+    - /Users/pmelab/Code/PAR/PAR-2148
+    - /Users/pmelab/Code/silverback-mono
+    - /Users/pmelab/Code/tcs
+    - /Users/pmelab/Code/paraplegie_ch
+    - /Users/pmelab/Code/waku
+    - /Users/pmelab/Code/amazeelabs-com
+    - /Users/pmelab/.config/nvim
+    - /Users/pmelab/Code/par-prod
+    - /Users/pmelab/Code/lgt-cp
+    - /Users/pmelab/Code/orrc
+    - /Users/pmelab/Code/caritas
+    - /Users/pmelab/Code/mba_unisg_ch
+    - /Users/pmelab/Code/grc
+    - /Users/pmelab/Code/griidc
+    - /Users/pmelab/Code/netlify-deploy
+    - /Users/pmelab/Code/luks_ch
+    - /Users/pmelab/Code/gitpod-dotfiles
+startuppopupversion: 5
+lastversion: 0.44.1
+customcommandshistory:
+    - q
+hidecommandlog: false
+ignorewhitespaceindiffview: false
+diffcontextsize: 1
+renamesimilaritythreshold: 50
+localbranchsortorder: recency
+remotebranchsortorder: alphabetical
+gitlogorder: topo-order
+gitlogshowgraph: always

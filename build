@@ -1,0 +1,4 @@
+#!/bin/bash
+darwin-rebuild switch --impure --flake ./nix
+cd ~/.dotfiles/npm
+npm install
