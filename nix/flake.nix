@@ -49,9 +49,6 @@
           pkgs.eza
           pkgs.difftastic
         ];
-        launchd.envVariables = {
-          MOZ_DISABLE_SAFE_MODE_KEY = "1";
-        };
         homebrew = {
           enable = true;
 
@@ -72,7 +69,6 @@
         # Necessary for using flakes on this system.
         nix.settings.experimental-features = "nix-command flakes";
 
-        programs.zsh.enable = true;
         programs.fish.enable = true;
 
         users.users.pmelab = { shell = pkgs.fish; };

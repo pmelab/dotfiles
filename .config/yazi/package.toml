@@ -1,5 +1,5 @@
-[plugin]
-deps = [{ use = "Reledia/glow", rev = "388e847" }]
-
 [flavor]
 deps = [{ use = "kmlupreti/ayu-dark", rev = "441a38d" }]
+
+[plugin]
+deps = [{ use = "Reledia/glow", rev = "5ce76dc" }]
