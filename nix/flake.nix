@@ -14,24 +14,22 @@
         # List packages installed in system profile. To search by name, run:
         # $ nix-env -qaP | grep wget
         environment.systemPackages = [
+          # Dotfile managment
+          pkgs.stow
+          # Prompt and history
           pkgs.starship
           pkgs.fish
           pkgs.atuin
-          pkgs.stow
           # Automatically load .envrc files.
           pkgs.direnv
           # Best editor
-          # pkgs.neovim
-          # pkgs.luajitPackages.luarocks-nix
           pkgs.helix
           # File manager 
           pkgs.yazi
-          # pkgs.zoxide
           # Git stuff
           pkgs.lazygit
           pkgs.git
           # Required for nix configuration in nvim
-          # pkgs.cargo
           pkgs.nixfmt-classic
           pkgs.nil
           # Global node for global CLI tools
@@ -51,6 +49,9 @@
           pkgs.eza
           pkgs.difftastic
         ];
+        launchd.envVariables = {
+          MOZ_DISABLE_SAFE_MODE_KEY = "1";
+        };
         homebrew = {
           enable = true;
 
@@ -59,9 +60,9 @@
             cleanup = "uninstall";
             upgrade = true;
           };
-          taps = [ "uselagoon/lagoon-cli" "nikitabobko/tap" ];
+          taps = [ "uselagoon/lagoon-cli" ];
           brews = [ "lagoon" ];
-          casks = [ "raycast" "ghostty" "mitmproxy" "font-recursive-mono-nerd-font" ];
+          casks = [ "raycast" "ghostty" "mitmproxy" "firefox" "font-recursive-mono-nerd-font" "1password-cli" ];
         };
 
         # Auto upgrade nix package and the daemon service.
@@ -89,7 +90,6 @@
           # Following line should allow us to avoid a logout/login cycle
           /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
         '';
-        system.defaults.dock.expose-group-by-app = true;
         system.defaults.dock.autohide = true;
         system.defaults.NSGlobalDomain."com.apple.mouse.tapBehavior" = 1;
         system.defaults.trackpad.TrackpadRightClick = true;

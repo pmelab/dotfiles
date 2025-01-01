@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env sh
 darwin-rebuild switch --impure --flake ./nix
 cd ~/.dotfiles/npm
 npm install

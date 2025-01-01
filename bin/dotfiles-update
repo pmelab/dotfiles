@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env sh
 cd ~/.dotfiles/nix
 nix flake update --impure --commit-lock-file
 cd ~/.dotfiles/npm
