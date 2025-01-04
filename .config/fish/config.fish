@@ -9,4 +9,5 @@ if status is-interactive
     set -x EDITOR hx
     fish_add_path --path ~/.dotfiles/npm/node_modules/.bin/
     fish_add_path --path ~/.dotfiles/bin/
+    fish_add_path --path /opt/homebrew/bin/
 end
