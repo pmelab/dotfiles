@@ -14,6 +14,7 @@
         # List packages installed in system profile. To search by name, run:
         # $ nix-env -qaP | grep wget
         environment.systemPackages = [
+          pkgs.ghostty
           # Dotfile managment
           pkgs.stow
           # Prompt and history
@@ -59,7 +60,7 @@
           };
           taps = [ "uselagoon/lagoon-cli" ];
           brews = [ "lagoon" ];
-          casks = [ "raycast" "ghostty" "mitmproxy" "firefox" "font-recursive-mono-nerd-font" "1password-cli" ];
+          casks = [ "raycast" "mitmproxy" "firefox" "font-recursive-mono-nerd-font" "1password-cli" ];
         };
 
         # Auto upgrade nix package and the daemon service.
