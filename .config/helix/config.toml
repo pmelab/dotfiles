@@ -10,7 +10,7 @@ auto-save = true
 color-modes = true
 
 [editor.inline-diagnostics]
-cursor-line = "error"
+cursor-line = "hint"
 
 [editor.file-picker]
 hidden = false
