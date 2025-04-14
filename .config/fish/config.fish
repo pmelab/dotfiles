@@ -9,5 +9,5 @@ if status is-interactive
     direnv hook fish | source
     atuin init fish | source
     zoxide init --cmd cd fish | source
-    set -x EDITOR hx
+    set -x EDITOR nvim
 end

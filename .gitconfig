@@ -1,0 +1,24 @@
+[gpg]
+  format = ssh
+[user]
+	name = Philipp Melab
+	email = philipp.melab@gmail.com
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILj8XTkbZ5i/xuyMun0TQggLIAuVktEIt149e5Ja+BA4
+[diff]
+    external = difft
+[init]
+	defaultBranch = main
+[commit]
+  gpgsign = true
+[gpg "ssh"]
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+[core]
+	editor = cursor
+	excludesfile = /Users/pmelab/.gitignore_global
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+	insteadOf = https://github.com/
+	insteadOf = https://github.com/
+	insteadOf = https://github.com/
+[pull]
+	rebase = true

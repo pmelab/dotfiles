@@ -1,4 +1,2 @@
 #!/usr/bin/env sh
 darwin-rebuild switch --impure --flake ~/.dotfiles/nix
-cd ~/.dotfiles/npm
-npm install

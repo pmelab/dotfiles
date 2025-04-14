@@ -4,6 +4,8 @@ font-size = 14
 font-family = RecMonoDuotone Nerd Font Mono
 window-padding-x = 8
 window-padding-y = 8
+cursor-color = #f0c6c6
+cursor-text = #181926
 
 keybind = clear
 keybind = super+t=new_tab

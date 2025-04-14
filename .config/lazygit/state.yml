@@ -1,16 +1,18 @@
-lastupdatecheck: 1712942431
+lastupdatecheck: 1737745253
 recentrepos:
     - /Users/pmelab/.dotfiles
     - /Users/pmelab/Code/silverback-template
-    - /Users/pmelab/Code/PAR/dev
-    - /Users/pmelab/Code/PAR/release
-    - /Users/pmelab/Code/PAR/PAR-2148
     - /Users/pmelab/Code/silverback-mono
     - /Users/pmelab/Code/tcs
+    - /Users/pmelab/Code/luks_ch
     - /Users/pmelab/Code/paraplegie_ch
     - /Users/pmelab/Code/waku
     - /Users/pmelab/Code/amazeelabs-com
-    - /Users/pmelab/.config/nvim
+    - /Users/pmelab/Code/PAR/release
+    - /Users/pmelab/Code/PAR/prod
+    - /Users/pmelab/Code/PAR/dev
+    - /Users/pmelab/Code/PAR/PAR-2150
+    - /Users/pmelab/Code/PAR/PAR-2148
     - /Users/pmelab/Code/par-prod
     - /Users/pmelab/Code/lgt-cp
     - /Users/pmelab/Code/orrc
@@ -19,16 +21,16 @@ recentrepos:
     - /Users/pmelab/Code/grc
     - /Users/pmelab/Code/griidc
     - /Users/pmelab/Code/netlify-deploy
-    - /Users/pmelab/Code/luks_ch
     - /Users/pmelab/Code/gitpod-dotfiles
 startuppopupversion: 5
-lastversion: 0.44.1
+lastversion: 0.48.0
 customcommandshistory:
     - q
-hidecommandlog: false
+    - wq
+hidecommandlog: true
 ignorewhitespaceindiffview: false
-diffcontextsize: 1
-renamesimilaritythreshold: 50
+diffcontextsize: 6
+renamesimilaritythreshold: 55
 localbranchsortorder: recency
 remotebranchsortorder: alphabetical
 gitlogorder: topo-order
