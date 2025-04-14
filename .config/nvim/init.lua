@@ -71,6 +71,16 @@ vim.api.nvim_set_keymap("n", "<Esc>", ":noh<CR>", { noremap = true, silent = tru
 vim.api.nvim_set_keymap("n", "j", "gj", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "k", "gk", { noremap = true, silent = true })
 
+-- Disable line numbers and sign column in terminal buffers
+vim.api.nvim_create_autocmd("TermOpen", {
+	pattern = "*",
+	callback = function()
+		vim.opt_local.number = false
+		vim.opt_local.relativenumber = false
+		vim.opt_local.signcolumn = "no"
+	end,
+})
+
 -- Setup lazy.nvim
 require("lazy").setup({
 	spec = {
