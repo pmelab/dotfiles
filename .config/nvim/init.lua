@@ -92,7 +92,18 @@ require("lazy").setup({
 				vim.cmd.colorscheme("catppuccin-mocha")
 			end,
 		},
-		{ dir = "~/plugins/terminator.nvim" },
+		-- Local terminator.nvim plugin
+		{
+			"terminator.nvim",
+			dir = "/Users/pmelab/.config/nvim/plugins/terminator.nvim", -- Replace with the actual path
+			config = function()
+				require("terminator").setup({
+					-- Your configuration options (if any)
+					-- ai! make sure terminals.json is loaded relative to the current working directory
+					terminals_file = vim.fn.stdpath("config") .. "/terminals.json",
+				})
+			end,
+		},
 		{
 			"williamboman/mason.nvim",
 			opts = {},
