@@ -3,16 +3,14 @@ local M = {}
 local config = require("terminator.config")
 
 function M.show()
-	-- ai! this does not work. look up how to use the picker from `folke/snacks.nvim` and implement it correctly
-	local snacks = require("snacks")
-
 	-- Prepare items for the picker
 	local items = {}
 	for id, terminal in pairs(config.terminals) do
 		table.insert(items, {
 			id = id,
-			text = terminal.label,
-			description = terminal.cwd .. (terminal.command and (" · " .. terminal.command) or ""),
+			label = terminal.label,
+			cwd = terminal.cwd,
+			command = terminal.command,
 		})
 	end
 
@@ -21,14 +19,29 @@ function M.show()
 		return
 	end
 
-	-- Show the picker using snacks.nvim
-	snacks.select(items, {
-		prompt = "Select Terminal",
-		on_select = function(item)
-			if item then
-				require("terminator").create_terminal(item.id)
-			end
-		end,
+	-- Format item for display in the picker
+	local function format_item(item)
+		local description = item.cwd .. (item.command and (" · " .. item.command) or "")
+		return {
+			display = item.label .. " (" .. description .. ")",
+			value = item.id, -- Pass the terminal ID as the value
+		}
+	end
+
+	-- Callback function when an item is selected
+	local function on_select(result)
+		-- result is the `value` from the selected item (the terminal ID)
+		if result then
+			require("terminator").create_terminal(result)
+		end
+	end
+
+	-- Show the picker using Snacks.picker with a custom finder definition
+	Snacks.picker({
+		prompt = "Select Terminal ›",
+		items = items,
+		format = format_item,
+		on_select = on_select,
 	})
 end
 
