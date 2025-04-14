@@ -34,11 +34,12 @@ function M.show()
 		if result then
 			require("terminator").create_terminal(result)
 		end
+		-- Prevent snacks.nvim from trying to perform a default action
+		return false
 	end
 
 	local snacks = require("snacks")
 	-- Show the picker using Snacks.picker with a custom finder definition
-	-- ai! something is wrong here. selecting an items errors with "item.file" or "item.bufname required"
 	snacks.picker({
 		prompt = "Select Terminal ›",
 		items = items,
