@@ -92,6 +92,7 @@ require("lazy").setup({
 				vim.cmd.colorscheme("catppuccin-mocha")
 			end,
 		},
+		{ dir = "~/plugins/terminator.nvim" },
 		{
 			"williamboman/mason.nvim",
 			opts = {},
