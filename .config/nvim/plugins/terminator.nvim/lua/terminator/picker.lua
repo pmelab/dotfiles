@@ -36,8 +36,10 @@ function M.show()
 		end
 	end
 
+	local snacks = require("snacks")
 	-- Show the picker using Snacks.picker with a custom finder definition
-	Snacks.picker({
+	-- ai! something is wrong here. selecting an items errors with "item.file" or "item.bufname required"
+	snacks.picker({
 		prompt = "Select Terminal ›",
 		items = items,
 		format = format_item,
