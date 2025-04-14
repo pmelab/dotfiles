@@ -99,8 +99,7 @@ require("lazy").setup({
 			config = function()
 				require("terminator").setup({
 					-- Your configuration options (if any)
-					-- ai! make sure terminals.json is loaded relative to the current working directory
-					terminals_file = vim.fn.stdpath("config") .. "/terminals.json",
+					terminals_file = vim.fn.getcwd() .. "/terminals.json",
 				})
 			end,
 		},
