@@ -637,126 +637,82 @@ require("lazy").setup({
 				})
 			end,
 		},
-		"mfussenegger/nvim-dap",
-		"theHamsta/nvim-dap-virtual-text",
-		-- {
-		-- 	"rcarriga/nvim-dap-ui",
-		-- 	dependencies = { "nvim-neotest/nvim-nio" },
-		-- 	init = function()
-		-- 		local dapui = require("dapui")
-		-- 		local dap = require("dap")
-		--
-		-- 		local function setup_debug_mappings()
-		-- 			-- Only create these mappings in debug mode
-		-- 			vim.api.nvim_buf_set_keymap(
-		-- 				0,
-		-- 				"n",
-		-- 				"C",
-		-- 				'<cmd>lua require("dap").continue()<CR>',
-		-- 				{ noremap = true, silent = true }
-		-- 			)
-		-- 			vim.api.nvim_buf_set_keymap(
-		-- 				0,
-		-- 				"n",
-		-- 				"j",
-		-- 				'<cmd>lua require("dap").step_over()<CR>',
-		-- 				{ noremap = true, silent = true }
-		-- 			)
-		-- 			vim.api.nvim_buf_set_keymap(
-		-- 				0,
-		-- 				"n",
-		-- 				"l",
-		-- 				'<cmd>lua require("dap").step_into()<CR>',
-		-- 				{ noremap = true, silent = true }
-		-- 			)
-		-- 			vim.api.nvim_buf_set_keymap(
-		-- 				0,
-		-- 				"n",
-		-- 				"k",
-		-- 				'<cmd>lua require("dap").step_out()<CR>',
-		-- 				{ noremap = true, silent = true }
-		-- 			)
-		-- 			vim.api.nvim_buf_set_keymap(
-		-- 				0,
-		-- 				"n",
-		-- 				"B",
-		-- 				'<cmd>lua require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: "))<CR>',
-		-- 				{ noremap = true, silent = true }
-		-- 			)
-		-- 			vim.api.nvim_buf_set_keymap(
-		-- 				0,
-		-- 				"n",
-		-- 				"R",
-		-- 				'<cmd>lua require("dap").repl.open()<CR>',
-		-- 				{ noremap = true, silent = true }
-		-- 			)
-		-- 			vim.api.nvim_buf_set_keymap(
-		-- 				0,
-		-- 				"n",
-		-- 				"I",
-		-- 				'<cmd>lua require("dap.ui.widgets").hover()<CR>',
-		-- 				{ noremap = true, silent = true }
-		-- 			)
-		-- 		end
-		--
-		-- 		--   						whichkey.add({ "<leader>d", group = "Debug" })
-		-- 		-- local giticon = require("mini.icons").get("filetype", "Debug")
-		-- 		--
-		-- 		-- local function map(mode, lhs, rhs, desc)
-		-- 		-- 	whichkey.add({
-		-- 		-- 		mode = mode,
-		-- 		-- 		lhs = lhs,
-		-- 		-- 		rhs = rhs,
-		-- 		-- 		desc = desc,
-		-- 		-- 		buffer = bufnr,
-		-- 		-- 		icon = giticon,
-		-- 		-- 	})
-		-- 		-- end
-		-- 		--       map("n", "<leader>db", function () dap.launch())
-		-- 		--
-		-- 		--   				local wk = require("which-key")
-		-- 		--           wk.add()
-		--
-		-- 		-- Set up autocommands to enable/disable debug mappings
-		-- 		vim.api.nvim_create_augroup("dap_mappings", { clear = true })
-		-- 		vim.api.nvim_create_autocmd("User", {
-		-- 			pattern = "DapAttached",
-		-- 			callback = setup_debug_mappings,
-		-- 			group = "dap_mappings",
-		-- 		})
-		--
-		-- 		vim.api.key(
-		-- 			0,
-		-- 			"n",
-		-- 			"b",
-		-- 			'<cmd>lua require("dap").toggle_breakpoint()<CR>',
-		-- 			{ noremap = true, silent = true }
-		-- 		)
-		--
-		-- 		vim.api.nvim_create_autocmd("User", {
-		-- 			pattern = "DapTerminated",
-		-- 			callback = function()
-		-- 				-- Clear the debug mappings when debugger detaches
-		-- 				local keys = {
-		-- 					"C",
-		-- 					"j",
-		-- 					"l",
-		-- 					"k",
-		-- 					"b",
-		-- 					"B",
-		-- 					"R",
-		-- 					"I",
-		-- 				}
-		-- 				for _, key in ipairs(keys) do
-		-- 					vim.api.nvim_buf_del_keymap(0, "n", key)
-		-- 				end
-		-- 			end,
-		-- 			group = "dap_mappings",
-		-- 		})
-		-- 	end,
-		-- },
+		{ "mfussenegger/nvim-dap" },
+		{ "theHamsta/nvim-dap-virtual-text", opts = {} },
+		{
+			"rcarriga/nvim-dap-ui",
+			dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
+			config = function()
+				local dap = require("dap")
+				local dapui = require("dapui")
+				dapui.setup({
+					layouts = {
+						{
+							elements = {
+								{ id = "scopes", size = 0.25 },
+								"breakpoints",
+								"stacks",
+								"watches",
+							},
+							size = 40,
+							position = "left",
+						},
+						{
+							elements = {
+								"repl",
+								"console",
+							},
+							size = 0.25,
+							position = "bottom",
+						},
+					},
+					controls = { enabled = false }, -- Disable default controls, we'll map them
+				})
+
+				-- Don't open UI on entering debug mode
+				dap.listeners.after.event_initialized["dapui_config"] = function() end
+				dap.listeners.before.event_terminated["dapui_config"] = function()
+					dapui.close()
+				end
+				dap.listeners.before.event_exited["dapui_config"] = function()
+					dapui.close()
+				end
+
+				local wk = require("which-key")
+				local dap_icon = require("mini.icons").get("misc", "Debug")
+
+				wk.add({
+					{ "<leader>d", group = "Debug", icon = dap_icon },
+					{ "<leader>db", "<cmd>lua require('dap').toggle_breakpoint()<CR>", desc = "Toggle Breakpoint" },
+					{
+						"<leader>dB",
+						'<cmd>lua require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: "))<CR>',
+						desc = "Set Conditional Breakpoint",
+					},
+					{ "<leader>dc", "<cmd>lua require('dap').continue()<CR>", desc = "Continue" },
+					{ "<leader>dj", "<cmd>lua require('dap').step_over()<CR>", desc = "Step Over (j)" },
+					{ "<leader>dl", "<cmd>lua require('dap').step_into()<CR>", desc = "Step Into (l)" },
+					{ "<leader>dk", "<cmd>lua require('dap').step_out()<CR>", desc = "Step Out (k)" },
+					{ "<leader>dr", "<cmd>lua require('dap').repl.open()<CR>", desc = "Open REPL" },
+					{ "<leader>dq", "<cmd>lua require('dap').terminate()<CR>", desc = "Quit" },
+					{ "<leader>du", "<cmd>lua require('dapui').toggle()<CR>", desc = "Toggle UI" },
+					{ "<leader>dh", "<cmd>lua require('dap.ui.widgets').hover()<CR>", desc = "Hover Variables (h)" },
+					{
+						"<leader>dD",
+						"<cmd>lua require('dapui').eval(nil, { enter = true })<CR>",
+						desc = "Evaluate Input",
+					},
+				})
+
+				-- Map D to evaluate under cursor in a floating window
+				vim.keymap.set("n", "D", function()
+					require("dapui").eval(nil, { enter = false })
+				end, { desc = "DAP Evaluate Hover" })
+			end,
+		},
 		{
 			"jay-babu/mason-nvim-dap.nvim",
+			dependencies = { "williamboman/mason.nvim", "mfussenegger/nvim-dap" },
 			config = function()
 				require("mason-nvim-dap").setup({
 					ensure_installed = {
