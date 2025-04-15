@@ -2,7 +2,8 @@ if status is-interactive
     alias cat="bat"
     alias ls="eza"
     alias glow="glow -s $HOME/.config/glow/catppuccin.json"
-    fish_add_path --path ~/.dotfiles/npm/node_modules/.bin/
+    alias pud="php -d xdebug.mode=debug vendor/bin/phpunit --filter"
+    alias pu="php vendor/bin/phpunit --filter"
     fish_add_path --path ~/.dotfiles/bin/
     fish_add_path --path /opt/homebrew/bin/
     starship init fish | source

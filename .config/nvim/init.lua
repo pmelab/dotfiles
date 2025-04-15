@@ -67,6 +67,9 @@ vim.diagnostic.config({ virtual_text = false })
 -- Clear search highlights with escape.
 vim.api.nvim_set_keymap("n", "<Esc>", ":noh<CR>", { noremap = true, silent = true })
 
+-- Make sure we can use ESC to exit terminal mode.
+vim.api.nvim_set_keymap("t", "<Esc>", [[<C-\><C-n>]], { noremap = true, silent = true })
+
 -- Set j and k to move per line through soft wraps.
 vim.api.nvim_set_keymap("n", "j", "gj", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "k", "gk", { noremap = true, silent = true })
@@ -90,17 +93,6 @@ require("lazy").setup({
 			priority = 1000,
 			init = function()
 				vim.cmd.colorscheme("catppuccin-mocha")
-			end,
-		},
-		-- Local terminator.nvim plugin
-		{
-			"terminator.nvim",
-			dir = "/Users/pmelab/.config/nvim/plugins/terminator.nvim", -- Replace with the actual path
-			config = function()
-				require("terminator").setup({
-					-- Your configuration options (if any)
-					terminals_file = vim.fn.getcwd() .. "/terminals.json",
-				})
 			end,
 		},
 		{
@@ -216,7 +208,9 @@ require("lazy").setup({
 			"folke/snacks.nvim",
 			---@type snacks.Config
 			opts = {
-				picker = {},
+				picker = {
+					ui_select = true,
+				},
 				explorer = {},
 			},
 			keys = {
@@ -612,7 +606,6 @@ require("lazy").setup({
 				require("nvim-treesitter.configs").setup(opts)
 			end,
 		},
-		-- "github/copilot.vim",
 		{
 			"lewis6991/gitsigns.nvim",
 			init = function()
