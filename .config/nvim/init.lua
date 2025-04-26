@@ -117,6 +117,7 @@ require("lazy").setup({
 					json = { "prettierd" },
 					yaml = { "prettierd" },
 					nix = { "nixfmt" },
+					python = { "black" },
 				},
 				format_on_save = {
 					timeout_ms = 500,
@@ -138,6 +139,9 @@ require("lazy").setup({
 					"graphql-language-service-cli",
 					"tailwindcss-language-server",
 					"marksman",
+					"pyright",
+					"black",
+					"debugpy",
 				},
 			},
 		},
@@ -558,6 +562,8 @@ require("lazy").setup({
 				lspconfig.tailwindcss.setup({})
 				lspconfig.nil_ls.setup({})
 				lspconfig.marksman.setup({})
+				-- python
+				lspconfig.pyright.setup({})
 
 				local cmp = require("cmp")
 
@@ -598,6 +604,7 @@ require("lazy").setup({
 						"html",
 						"markdown",
 						"gitcommit",
+						"python",
 					},
 					highlight = {
 						enable = true,
@@ -732,6 +739,26 @@ require("lazy").setup({
 							-- 		port = 9003,
 							-- 	},
 							-- }
+							require("mason-nvim-dap").default_setup(config)
+						end,
+						python = function(config)
+							config.configurations = {
+								{
+									type = "python",
+									request = "launch",
+									name = "Launch file",
+									program = "${file}",
+									pythonPath = function()
+										-- Try to use the active virtual environment's Python
+										local venv = os.getenv("VIRTUAL_ENV")
+										if venv then
+											return venv .. "/bin/python"
+										end
+										-- Fall back to system Python
+										return "/usr/bin/python3"
+									end,
+								},
+							}
 							require("mason-nvim-dap").default_setup(config)
 						end,
 					},
