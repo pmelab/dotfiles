@@ -679,7 +679,7 @@ require("lazy").setup({
 				end
 
 				local wk = require("which-key")
-				local dap_icon = require("mini.icons").get("misc", "Debug")
+				local dap_icon = require("mini.icons").get("filetype", "Debug")
 
 				wk.add({
 					{ "<leader>d", group = "Debug", icon = dap_icon },
@@ -724,14 +724,14 @@ require("lazy").setup({
 							require("mason-nvim-dap").default_setup(config)
 						end,
 						php = function(config)
-							config.configurations = {
-								{
-									type = "php",
-									request = "launch",
-									name = "PHP: Xdebug",
-									port = 9003,
-								},
-							}
+							-- config.configurations = {
+							-- 	{
+							-- 		type = "php",
+							-- 		request = "launch",
+							-- 		name = "PHP: Xdebug",
+							-- 		port = 9003,
+							-- 	},
+							-- }
 							require("mason-nvim-dap").default_setup(config)
 						end,
 					},
