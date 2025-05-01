@@ -81,7 +81,6 @@
             "obsidian"
             "zen-browser"
             "ollama"
-            "visual-studio-code"  # For Python debugging
           ];
           masApps = { Things = 904280696; };
         };
