@@ -19,6 +19,12 @@
           pkgs.nixfmt-classic
           pkgs.nil
           pkgs.phpactor
+          # Python tools
+          pkgs.python311
+          pkgs.black
+          pkgs.pyright
+          pkgs.ruff-lsp
+          pkgs.python311Packages.debugpy
         ];
         homebrew = {
           enable = true;
@@ -75,6 +81,7 @@
             "obsidian"
             "zen-browser"
             "ollama"
+            "visual-studio-code"  # For Python debugging
           ];
           masApps = { Things = 904280696; };
         };
