@@ -60,6 +60,41 @@ local function is_drupal_project(cwd)
 	return false
 end
 
+-- Detect if current file is in a Storybook project
+local function is_storybook_project(cwd)
+	local root = require("lspconfig/util").root_pattern({ "package.json", ".storybook" })(cwd)
+	if root then
+		-- Check for .storybook directory
+		if vim.fn.isdirectory(root .. "/.storybook") == 1 then
+			return true
+		end
+		-- Check for storybook in package.json
+		if vim.fn.filereadable(root .. "/package.json") == 1 then
+			local package_content = vim.fn.readfile(root .. "/package.json")
+			local package_string = table.concat(package_content, "\n")
+			if string.find(package_string, "@storybook") or string.find(package_string, "storybook") then
+				return true
+			end
+		end
+	end
+	return false
+end
+
+-- Detect if current file is in a Python project
+local function is_python_project(cwd)
+	local root = require("lspconfig/util").root_pattern({
+		"pyproject.toml",
+		"requirements.txt",
+		"setup.py",
+		"Pipfile",
+		"poetry.lock",
+	})(cwd)
+	if root then
+		return true
+	end
+	return false
+end
+
 vim.opt.rtp:prepend(lazypath)
 
 vim.g.mapleader = " "
@@ -188,14 +223,18 @@ require("lazy").setup({
 						lualine_a = { "mode" },
 						lualine_b = { "branch", "diff", "diagnostics" },
 						lualine_c = { "filename" },
-						lualine_x = { 
+						lualine_x = {
 							{
 								function()
 									local cwd = vim.fn.getcwd()
 									if is_laravel_project(cwd) then
-										return "Laravel"
+										return "󰫐 Laravel"
 									elseif is_drupal_project(cwd) then
-										return "Drupal"
+										return "󰇤 Drupal"
+									elseif is_storybook_project(cwd) then
+										return " Storybook"
+									elseif is_python_project(cwd) then
+										return " Python"
 									end
 									return ""
 								end,
@@ -205,11 +244,15 @@ require("lazy").setup({
 										return { fg = "#ff6b6b", gui = "bold" }
 									elseif is_drupal_project(cwd) then
 										return { fg = "#0678be", gui = "bold" }
+									elseif is_storybook_project(cwd) then
+										return { fg = "#ff69b4", gui = "bold" }
+									elseif is_python_project(cwd) then
+										return { fg = "#3776ab", gui = "bold" }
 									end
 									return {}
 								end,
 							},
-							"filetype" 
+							"filetype",
 						},
 						lualine_y = { "progress" },
 						lualine_z = { "location" },
@@ -635,7 +678,7 @@ require("lazy").setup({
 						},
 					},
 				})
-				
+
 				-- Setup phpactor for non-Laravel PHP projects
 				lspconfig.phpactor.setup({
 					root_dir = function(fname)
