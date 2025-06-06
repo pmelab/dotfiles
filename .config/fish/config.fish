@@ -12,4 +12,8 @@ if status is-interactive
     atuin init fish | source
     zoxide init --cmd cd fish | source
     set -x EDITOR hx
+    set -x DOCKER_HOST $(limactl list default --format 'unix://{{.Dir}}/sock/docker.sock')
+    set -x AMAZEEAI_API_KEY $(op read "op://Personal/amazee.ai LLM/credential")
+    set -x AMAZEEAI_BASE_URL "https://llm.de103.amazee.ai"
 end
+alias claude="/Users/pmelab/.claude/local/claude"
