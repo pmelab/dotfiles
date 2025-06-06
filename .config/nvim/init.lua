@@ -37,6 +37,29 @@ local function silverback_drupal_root(cwd)
 	return cwd
 end
 
+-- Detect if current file is in a Laravel project
+local function is_laravel_project(cwd)
+	local root = require("lspconfig/util").root_pattern({ "artisan", "composer.json" })(cwd)
+	if root and vim.fn.filereadable(root .. "/artisan") == 1 then
+		return true
+	end
+	return false
+end
+
+-- Detect if current file is in a Drupal project
+local function is_drupal_project(cwd)
+	local root = require("lspconfig/util").root_pattern({ "composer.json" })(cwd)
+	if root and vim.fn.filereadable(root .. "/composer.json") == 1 then
+		-- Check if it's a Drupal project by looking for drupal/core in composer.json
+		local composer_content = vim.fn.readfile(root .. "/composer.json")
+		local composer_string = table.concat(composer_content, "\n")
+		if string.find(composer_string, "drupal/core") then
+			return true
+		end
+	end
+	return false
+end
+
 vim.opt.rtp:prepend(lazypath)
 
 vim.g.mapleader = " "
@@ -118,6 +141,15 @@ require("lazy").setup({
 					yaml = { "prettierd" },
 					nix = { "nixfmt" },
 					python = { "black" },
+					php = function(bufnr)
+						local cwd = vim.fn.getcwd()
+						if is_laravel_project(cwd) then
+							return { "pint" }
+						elseif is_drupal_project(cwd) then
+							return { "phpcbf" }
+						end
+						return {}
+					end,
 				},
 				format_on_save = {
 					timeout_ms = 500,
@@ -135,6 +167,9 @@ require("lazy").setup({
 					"prettierd",
 					"vtsls",
 					"phpactor",
+					"intelephense",
+					"pint",
+					"phpcbf",
 					"php-debug-adapter",
 					"graphql-language-service-cli",
 					"tailwindcss-language-server",
@@ -153,7 +188,29 @@ require("lazy").setup({
 						lualine_a = { "mode" },
 						lualine_b = { "branch", "diff", "diagnostics" },
 						lualine_c = { "filename" },
-						lualine_x = { "filetype" },
+						lualine_x = { 
+							{
+								function()
+									local cwd = vim.fn.getcwd()
+									if is_laravel_project(cwd) then
+										return "Laravel"
+									elseif is_drupal_project(cwd) then
+										return "Drupal"
+									end
+									return ""
+								end,
+								color = function()
+									local cwd = vim.fn.getcwd()
+									if is_laravel_project(cwd) then
+										return { fg = "#ff6b6b", gui = "bold" }
+									elseif is_drupal_project(cwd) then
+										return { fg = "#0678be", gui = "bold" }
+									end
+									return {}
+								end,
+							},
+							"filetype" 
+						},
 						lualine_y = { "progress" },
 						lualine_z = { "location" },
 					},
@@ -553,10 +610,40 @@ require("lazy").setup({
 				lspconfig.vtsls.setup({})
 				-- graphql
 				lspconfig.graphql.setup({})
-				-- php
+				-- php (conditional setup based on project type)
+				-- Setup Intelliphense for Laravel projects
+				lspconfig.intelephense.setup({
+					root_dir = function(fname)
+						local cwd = vim.fn.fnamemodify(fname, ":h")
+						if is_laravel_project(cwd) then
+							return require("lspconfig/util").root_pattern({ "artisan", "composer.json" })(fname)
+						end
+						return nil -- Don't attach if not Laravel
+					end,
+					settings = {
+						intelephense = {
+							files = {
+								maxSize = 1000000,
+							},
+							completion = {
+								insertUseDeclaration = true,
+								fullyQualifyGlobalConstantsAndFunctions = false,
+							},
+							format = {
+								braces = "psr12",
+							},
+						},
+					},
+				})
+				
+				-- Setup phpactor for non-Laravel PHP projects
 				lspconfig.phpactor.setup({
-					root_dir = function(cwd)
-						return silverback_drupal_root(cwd)
+					root_dir = function(fname)
+						local cwd = vim.fn.fnamemodify(fname, ":h")
+						if not is_laravel_project(cwd) then
+							return silverback_drupal_root(cwd)
+						end
+						return nil -- Don't attach if Laravel
 					end,
 				})
 				lspconfig.tailwindcss.setup({})
