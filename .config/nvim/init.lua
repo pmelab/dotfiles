@@ -176,6 +176,7 @@ require("lazy").setup({
 					yaml = { "prettierd" },
 					nix = { "nixfmt" },
 					python = { "black" },
+					blade = { "blade-formatter" },
 					php = function(bufnr)
 						local cwd = vim.fn.getcwd()
 						if is_laravel_project(cwd) then
@@ -212,6 +213,7 @@ require("lazy").setup({
 					"pyright",
 					"black",
 					"debugpy",
+					"blade-formatter",
 				},
 			},
 		},
@@ -667,6 +669,7 @@ require("lazy").setup({
 						intelephense = {
 							files = {
 								maxSize = 1000000,
+								associations = { "*.php", "*.blade.php" },
 							},
 							completion = {
 								insertUseDeclaration = true,
@@ -677,6 +680,7 @@ require("lazy").setup({
 							},
 						},
 					},
+					filetypes = { "php", "blade" },
 				})
 
 				-- Setup phpactor for non-Laravel PHP projects
@@ -723,6 +727,10 @@ require("lazy").setup({
 					"snacks.nvim",
 				},
 			},
+		},
+		{
+			"jwalton512/vim-blade",
+			ft = "blade",
 		},
 		{
 			"nvim-treesitter/nvim-treesitter",
