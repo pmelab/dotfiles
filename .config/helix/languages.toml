@@ -77,7 +77,7 @@ injection-regex = "python"
 file-types = ["py"]
 shebangs = ["python"]
 roots = ["pyproject.toml", "setup.py", "Poetry.lock", "requirements.txt", ".git"]
-language-servers = ["pyright", "ruff"]
+language-servers = ["pyright"]
 formatter = { command = "black", args = ["--quiet", "-"] }
 auto-format = true
 # debugger = { name = "debugpy", transport = "pipe", command = "python", args = ["-m", "debugpy.adapter"] }

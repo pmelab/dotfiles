@@ -28,3 +28,4 @@ keybind = alt+shift+o=decrease_font_size:1
 keybind = alt+shift+p=increase_font_size:1
 keybind = alt+shift+[=inspector:toggle
 keybind = alt+shift+]=reload_config
+keybind = shift+enter=text:\n
