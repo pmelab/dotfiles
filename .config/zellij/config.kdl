@@ -1,0 +1,60 @@
+// Zellij configuration
+// https://zellij.dev/documentation/
+
+// Default shell
+default_shell "fish"
+
+// Copy command
+copy_command "pbcopy"
+
+// Enable mouse mode
+mouse_mode true
+
+// Automatically attach to existing session
+auto_attach true
+
+// Pane configuration
+pane_frames true
+
+// UI configuration
+ui {
+    pane_frames {
+        rounded_corners false
+        hide_session_name false
+    }
+}
+
+// Theme configuration
+theme "catppuccin-mocha"
+
+// Compact display
+default_layout "compact"
+
+// Keybindings
+keybinds {
+    normal {
+        // Disable default Ctrl+q binding to prevent accidental quit
+        unbind "Ctrl q"
+        
+        // Tab management (matching Ghostty shortcuts)
+        bind "Super t" { NewTab; }
+        bind "Super w" { CloseTab; }
+        bind "Alt Shift n" { GoToPreviousTab; }
+        bind "Alt Shift m" { GoToNextTab; }
+        
+        // Pane management (matching Ghostty shortcuts)
+        bind "Alt Shift u" { NewPane "Down"; }
+        bind "Alt Shift i" { NewPane "Right"; }
+        bind "Alt Shift h" { MoveFocus "Left"; }
+        bind "Alt Shift j" { MoveFocus "Down"; }
+        bind "Alt Shift k" { MoveFocus "Up"; }
+        bind "Alt Shift l" { MoveFocus "Right"; }
+        bind "Alt Shift y" { TogglePaneFrames; ToggleFocusFullscreen; }
+        
+        // System commands
+        bind "Super q" { Quit; }
+    }
+}
+
+// Include auto-generated environment configuration
+include "config-env.kdl"

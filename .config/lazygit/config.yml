@@ -2,7 +2,8 @@ git:
   commit:
     verbose: true
   paging:
-    externalDiffCommand: difft --color=always --display=inline
+    colorArg: always
+    pager: delta --dark --paging=never
 gui:
   showIcons: true
   theme:

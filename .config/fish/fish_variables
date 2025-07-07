@@ -1,7 +1,7 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
 SETUVAR --export BAT_THEME:Catppuccin\x20Mocha
-SETUVAR --export EDITOR:hx
+SETUVAR --export EDITOR:nvim
 SETUVAR --export GATSBY_TELEMETRY_DISABLED:1
 SETUVAR --export VISUAL:nvim
 SETUVAR --export XDG_CONFIG_HOME:/Users/pmelab/\x2econfig

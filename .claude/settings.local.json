@@ -6,7 +6,12 @@
       "Bash(sed:*)",
       "Bash(grep:*)",
       "Bash(git add:*)",
-      "Bash(nvim:*)"
+      "Bash(nvim:*)",
+      "Bash(rg:*)",
+      "Bash(brew bundle:*)",
+      "Bash(delta:*)",
+      "Bash(mkdir:*)",
+      "Bash(chmod:*)"
     ],
     "deny": []
   }

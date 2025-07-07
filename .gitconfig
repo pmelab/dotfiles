@@ -5,7 +5,32 @@
 	email = philipp.melab@gmail.com
 	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILj8XTkbZ5i/xuyMun0TQggLIAuVktEIt149e5Ja+BA4
 [diff]
-    external = difft
+    colorMoved = default
+[delta]
+    navigate = true
+    light = false
+    syntax-theme = Catppuccin Mocha
+    line-numbers = true
+    side-by-side = false
+    features = catppuccin-mocha
+[delta "catppuccin-mocha"]
+    minus-style = syntax "#3e2e42"
+    minus-non-emph-style = syntax "#3e2e42"
+    minus-emph-style = syntax "#684558"
+    minus-empty-line-marker-style = syntax "#3e2e42"
+    plus-style = syntax "#2d3f4b"
+    plus-non-emph-style = syntax "#2d3f4b"
+    plus-emph-style = syntax "#495e72"
+    plus-empty-line-marker-style = syntax "#2d3f4b"
+    map-styles = \
+        bold purple => syntax "#ff7eb6", \
+        bold blue => syntax "#78a9ff", \
+        bold cyan => syntax "#3ddbd9", \
+        bold yellow => syntax "#ee5396"
+    zero-style = syntax
+    whitespace-error-style = "#f97583"
+[interactive]
+    diffFilter = delta --color-only
 [init]
 	defaultBranch = main
 [commit]

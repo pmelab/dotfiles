@@ -47,3 +47,48 @@ The configuration follows XDG Base Directory specification with most configs in 
 - Integrated development: Python (with debugpy), PHP (with phpactor), JavaScript/TypeScript
 - Container development: Docker via Lima, DDEV for Drupal development
 - History and navigation: Atuin for shell history, zoxide for smart directory jumping
+
+## Package Management Workflow
+
+### Nix Packages (Programming Languages & Core Tools)
+- Edit `nix/flake.nix` to add/remove system packages
+- Run `~/bin/dotfiles-build` to apply changes
+- Run `~/bin/dotfiles-update` to update Nix flake lock file
+
+### Homebrew Packages (CLI Tools & Applications)
+- Edit `Brewfile` to add/remove packages
+- Run `brew bundle --file ~/.dotfiles/Brewfile` to install/update
+
+### Language Servers & Development Tools
+- Edit `npm/package.json` to add/remove language servers
+- Run `npm install` in the npm/ directory to install/update
+- Language servers are accessible via PATH from Fish shell configuration
+
+### Configuration Deployment
+- Use `stow .` from ~/.dotfiles/ to create symlinks for configuration files
+- Files listed in `.stow-local-ignore` (npm, nix, bin, .git) are excluded from symlinking
+
+## Important Aliases & Commands
+
+From Fish shell configuration:
+- `cat` → `bat` (syntax highlighted file viewing)
+- `ls` → `eza` (modern ls replacement)
+- `cd` → `zoxide` (smart directory jumping)
+- `pu` → `php vendor/bin/phpunit --filter` (PHP unit testing)
+- `pud` → `php -d xdebug.mode=debug vendor/bin/phpunit --filter` (PHP unit testing with debug)
+
+## Editor Configuration
+
+- **Helix**: Primary editor with comprehensive LSP setup in `.config/helix/languages.toml`
+  - Python: pyright + ruff
+  - PHP: phpactor
+  - JavaScript/TypeScript: eslint + typescript-language-server
+  - JSON: vscode-json-language-server
+- **Neovim**: Secondary editor with Laravel/Drupal specific tooling
+
+## Container & Development Environment
+
+- Docker runs via Lima (not Docker Desktop)
+- DDEV for Drupal development workflows
+- Environment variables managed through 1Password CLI integration
+- direnv for automatic environment loading

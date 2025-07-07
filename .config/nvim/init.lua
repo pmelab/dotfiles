@@ -23,8 +23,8 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 
 -- Search for Drupal root directory in silverback projects
-local function silverback_drupal_root(cwd)
-	local root = require("lspconfig/util").root_pattern({ "pnpm-lock.yaml" })(cwd)
+local function silverback_drupal_root(fname)
+	local root = require("lspconfig/util").root_pattern({ "pnpm-lock.yaml" })(fname)
 	if root and vim.fn.filereadable(root .. "/apps/silverback-drupal/composer.json") == 1 then
 		return root .. "/apps/silverback-drupal"
 	end
@@ -34,7 +34,16 @@ local function silverback_drupal_root(cwd)
 	if root then
 		return root
 	end
-	return cwd
+	-- Fallback to composer.json root pattern if no pnpm-lock.yaml found
+	return require("lspconfig/util").root_pattern({ "composer.json" })(fname)
+end
+
+-- Check if Pint is available in the project
+local function has_pint(root_dir)
+	if not root_dir then
+		return false
+	end
+	return vim.fn.filereadable(root_dir .. "/vendor/bin/pint") == 1
 end
 
 -- Detect if current file is in a Laravel project
@@ -159,6 +168,7 @@ require("lazy").setup({
 		},
 		{
 			"stevearc/conform.nvim",
+			enabled = false,
 			cmd = { "ConformInfo" },
 			event = { "BufWritePre" },
 			---@module "conform"
@@ -178,10 +188,12 @@ require("lazy").setup({
 					python = { "black" },
 					blade = { "blade-formatter" },
 					php = function(bufnr)
-						local cwd = vim.fn.getcwd()
-						if is_laravel_project(cwd) then
+						local fname = vim.api.nvim_buf_get_name(bufnr)
+						local root_dir = require("lspconfig/util").root_pattern({ "composer.json" })(fname)
+
+						if has_pint(root_dir) then
 							return { "pint" }
-						elseif is_drupal_project(cwd) then
+						elseif is_drupal_project(fname) then
 							return { "phpcbf" }
 						end
 						return {}
@@ -665,6 +677,17 @@ require("lazy").setup({
 						end
 						return nil -- Don't attach if not Laravel
 					end,
+					on_attach = function(client, bufnr)
+						local root_dir = client.config.root_dir
+						if has_pint(root_dir) then
+							-- Disable LSP formatting in favor of Pint
+							client.server_capabilities.documentFormattingProvider = false
+							client.server_capabilities.documentRangeFormattingProvider = false
+
+							-- Set up Pint formatting
+							vim.api.nvim_buf_set_option(bufnr, "formatprg", root_dir .. "/vendor/bin/pint --quiet -")
+						end
+					end,
 					settings = {
 						intelephense = {
 							files = {
@@ -688,9 +711,20 @@ require("lazy").setup({
 					root_dir = function(fname)
 						local cwd = vim.fn.fnamemodify(fname, ":h")
 						if not is_laravel_project(cwd) then
-							return silverback_drupal_root(cwd)
+							return silverback_drupal_root(fname)
 						end
 						return nil -- Don't attach if Laravel
+					end,
+					on_attach = function(client, bufnr)
+						local root_dir = client.config.root_dir
+						if has_pint(root_dir) then
+							-- Disable LSP formatting in favor of Pint
+							client.server_capabilities.documentFormattingProvider = false
+							client.server_capabilities.documentRangeFormattingProvider = false
+
+							-- Set up Pint formatting
+							vim.api.nvim_buf_set_option(bufnr, "formatprg", root_dir .. "/vendor/bin/pint --quiet -")
+						end
 					end,
 				})
 				lspconfig.tailwindcss.setup({})

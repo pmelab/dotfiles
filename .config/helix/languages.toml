@@ -6,6 +6,10 @@ args = ["--stdio"]
 command = "ruff-lsp"
 args = []
 
+[language-server.pylsp]
+command = "pylsp"
+config = { pylsp = { plugins = { flake8 = { enabled = true }, pycodestyle = { enabled = false }, pyflakes = { enabled = false } } } }
+
 [language-server.eslint]
 command = "vscode-eslint-language-server"
 args = ["--stdio"]
@@ -74,10 +78,10 @@ auto-format = true
 name = "python"
 scope = "source.python"
 injection-regex = "python"
-file-types = ["py"]
-shebangs = ["python"]
+file-types = ["py", "pyi", "py3", "pyw", "ptl", "pyx"]
+shebangs = ["python", "python3"]
 roots = ["pyproject.toml", "setup.py", "Poetry.lock", "requirements.txt", ".git"]
-language-servers = ["pyright"]
+language-servers = ["pyright", "pylsp"]
 formatter = { command = "black", args = ["--quiet", "-"] }
 auto-format = true
 # debugger = { name = "debugpy", transport = "pipe", command = "python", args = ["-m", "debugpy.adapter"] }
