@@ -12,7 +12,8 @@
       "Bash(delta:*)",
       "Bash(mkdir:*)",
       "Bash(chmod:*)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(./run_tests.sh)"
     ],
     "deny": []
   }

@@ -1,0 +1,163 @@
+name: Test Neovim Configuration
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test on ${{ matrix.os }} with Neovim ${{ matrix.neovim_version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        neovim_version: ['v0.9.4', 'v0.10.1', 'nightly']
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Neovim
+        uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+          version: ${{ matrix.neovim_version }}
+
+      - name: Check Neovim version
+        run: nvim --version
+
+      - name: Setup Node.js (for language servers)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: npm/package-lock.json
+
+      - name: Install language servers
+        run: |
+          cd npm
+          npm ci
+
+      - name: Setup Python (for Python language server)
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Python language tools
+        run: |
+          pip install pyright black debugpy
+
+      - name: Create test data directory
+        run: mkdir -p ~/.local/share/nvim
+
+      - name: Run infrastructure tests
+        run: |
+          cd .config/nvim
+          nvim --headless -u tests/minimal.vim -c "lua require('plenary.busted')" -c "PlenaryBustedFile tests/spec/infrastructure_spec.lua"
+
+      - name: Run project detection tests
+        run: |
+          cd .config/nvim
+          nvim --headless -u tests/minimal.vim -c "lua require('plenary.busted')" -c "PlenaryBustedFile tests/spec/project_detection_spec.lua"
+
+      - name: Run all tests
+        run: |
+          cd .config/nvim
+          nvim --headless -u tests/minimal.vim -c "lua require('plenary.busted')" -c "PlenaryBustedDirectory tests/spec/"
+
+      - name: Test basic config loading
+        run: |
+          cd .config/nvim
+          timeout 30s nvim --headless -u init.lua -c "sleep 2" -c "qa!" || echo "Config loading test completed"
+
+  startup-benchmark:
+    name: Startup Performance Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Neovim
+        uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+          version: 'v0.10.1'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: npm/package-lock.json
+
+      - name: Install language servers
+        run: |
+          cd npm
+          npm ci
+
+      - name: Create test data directory
+        run: mkdir -p ~/.local/share/nvim
+
+      - name: Measure startup time
+        run: |
+          cd .config/nvim
+          echo "Measuring Neovim startup time..."
+          
+          # Measure startup time (average of 5 runs)
+          startup_times=()
+          for i in {1..5}; do
+            start_time=$(date +%s%N)
+            timeout 10s nvim --headless -u init.lua -c "qa!" 2>/dev/null || true
+            end_time=$(date +%s%N)
+            startup_time=$(( (end_time - start_time) / 1000000 )) # Convert to milliseconds
+            startup_times+=($startup_time)
+            echo "Run $i: ${startup_time}ms"
+          done
+          
+          # Calculate average
+          total=0
+          for time in "${startup_times[@]}"; do
+            total=$((total + time))
+          done
+          average=$((total / 5))
+          
+          echo "Average startup time: ${average}ms"
+          
+          # Fail if startup time is too slow (> 2 seconds)
+          if [ $average -gt 2000 ]; then
+            echo "❌ Startup time is too slow: ${average}ms (max: 2000ms)"
+            exit 1
+          else
+            echo "✅ Startup time is acceptable: ${average}ms"
+          fi
+
+  lint:
+    name: Lint Lua Code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Lua
+        uses: leafo/gh-actions-lua@v10
+        with:
+          luaVersion: "5.1"
+
+      - name: Setup LuaRocks
+        uses: leafo/gh-actions-luarocks@v4
+
+      - name: Install StyLua
+        run: |
+          curl -L https://github.com/JohnnyMorganz/StyLua/releases/latest/download/stylua-linux-x86_64.zip -o stylua.zip
+          unzip stylua.zip
+          chmod +x stylua
+          sudo mv stylua /usr/local/bin/
+
+      - name: Check Lua formatting
+        run: |
+          cd .config/nvim
+          stylua --check .

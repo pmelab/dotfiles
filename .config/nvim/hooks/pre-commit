@@ -1,0 +1,67 @@
+#!/bin/bash
+
+# Pre-commit hook for Neovim configuration
+# This script runs tests before allowing commits
+
+set -e
+
+echo "🔧 Running pre-commit checks for Neovim configuration..."
+
+# Check if we're in a Neovim configuration directory
+if [ ! -f "init.lua" ]; then
+    echo "⚠️  This doesn't appear to be a Neovim configuration directory"
+    echo "   Pre-commit hook is designed for .config/nvim directory"
+    exit 0
+fi
+
+# Check if nvim is available
+if ! command -v nvim &> /dev/null; then
+    echo "❌ Neovim is not installed or not in PATH"
+    echo "   Skipping Neovim configuration tests"
+    exit 0
+fi
+
+# Check if test files exist
+if [ ! -d "tests" ]; then
+    echo "ℹ️  No tests directory found, skipping tests"
+    exit 0
+fi
+
+echo "🧪 Running Neovim configuration tests..."
+
+# Run tests with timeout to prevent hanging
+timeout 30s ./run_tests.sh || {
+    exit_code=$?
+    if [ $exit_code -eq 124 ]; then
+        echo "❌ Tests timed out after 30 seconds"
+    else
+        echo "❌ Tests failed with exit code $exit_code"
+    fi
+    echo "   Commit aborted. Please fix tests before committing."
+    exit 1
+}
+
+echo "✅ All tests passed!"
+
+# Optional: Check for common issues in init.lua
+echo "🔍 Checking for common configuration issues..."
+
+# Check for syntax errors in Lua files
+if command -v luac &> /dev/null; then
+    find . -name "*.lua" -not -path "./tests/*" -exec luac -p {} \; 2>&1 | grep -v "^$" && {
+        echo "❌ Lua syntax errors found. Please fix them before committing."
+        exit 1
+    } || true
+    echo "✅ No Lua syntax errors found"
+else
+    echo "ℹ️  luac not available, skipping Lua syntax check"
+fi
+
+# Check for potential issues in configuration
+if grep -r "TODO\|FIXME\|XXX" --include="*.lua" . --exclude-dir=tests; then
+    echo "⚠️  Found TODO/FIXME comments in configuration"
+    echo "   Consider addressing these before committing"
+    # Don't fail on TODOs, just warn
+fi
+
+echo "🎉 Pre-commit checks completed successfully!"
