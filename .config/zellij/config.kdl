@@ -10,8 +10,8 @@ copy_command "pbcopy"
 // Enable mouse mode
 mouse_mode true
 
-// Automatically attach to existing session
-auto_attach true
+// Default session name to attach to or create
+default_session_name "Second Brain"
 
 // Pane configuration
 pane_frames true
@@ -19,8 +19,13 @@ pane_frames true
 // UI configuration
 ui {
     pane_frames {
-        rounded_corners false
+        rounded_corners true
         hide_session_name false
+    }
+    
+    // Move tab bar to top
+    tab_bar {
+        position "top"
     }
 }
 
@@ -35,6 +40,10 @@ keybinds {
     normal {
         // Disable default Ctrl+q binding to prevent accidental quit
         unbind "Ctrl q"
+        unbind "Alt h"
+        unbind "Alt j"
+        unbind "Alt k"
+        unbind "Alt l"
         
         // Tab management (matching Ghostty shortcuts)
         bind "Super t" { NewTab; }
@@ -50,6 +59,9 @@ keybinds {
         bind "Alt Shift k" { MoveFocus "Up"; }
         bind "Alt Shift l" { MoveFocus "Right"; }
         bind "Alt Shift y" { TogglePaneFrames; ToggleFocusFullscreen; }
+        
+        // Session management
+        bind "Alt Shift o" { LaunchOrFocusPlugin "session-manager" { floating true; move_to_focused_tab true; }; }
         
         // System commands
         bind "Super q" { Quit; }

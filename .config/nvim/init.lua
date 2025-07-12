@@ -812,12 +812,64 @@ require("lazy").setup({
 						map("n", "<leader>gb", function()
 							gitsigns.blame_line({ full = true })
 						end, "Blame line")
+
+						map("n", "<leader>gs", function()
+							gitsigns.stage_hunk({vim.fn.line('.'), vim.fn.line('.')})
+						end, "Stage/unstage current line")
+						map("v", "<leader>gs", function()
+							gitsigns.stage_hunk({vim.fn.line("'<"), vim.fn.line("'>")})
+						end, "Stage/unstage selected lines")
+
+						map("n", "<leader>gf", gitsigns.stage_buffer, "Stage file")
 					end,
+				})
+				
+				-- Global git file picker (outside of buffer-specific mappings)
+				local wk = require("which-key")
+				local giticon = require("mini.icons").get("filetype", "Git")
+				wk.add({
+					{
+						"<leader>gl",
+						function()
+							Snacks.picker.git_status({ staged = false })
+						end,
+						desc = "Git Unstaged Files",
+						icon = giticon,
+					},
+					{
+						"<leader>gd",
+						function()
+							Snacks.picker.git_diff({ 
+								current_file = true,
+								staged = false 
+							})
+						end,
+						desc = "Git Unstaged Hunks (Current File)",
+						icon = giticon,
+					},
 				})
 			end,
 		},
 		{ "mfussenegger/nvim-dap" },
 		{ "theHamsta/nvim-dap-virtual-text", opts = {} },
+		{
+			"folke/zen-mode.nvim",
+			opts = {
+				window = {
+					width = 80,
+					height = 1,
+					options = {
+						signcolumn = "no",
+						number = false,
+						relativenumber = false,
+						cursorline = false,
+						cursorcolumn = false,
+						foldcolumn = "0",
+						list = false,
+					},
+				},
+			},
+		},
 		{
 			"rcarriga/nvim-dap-ui",
 			dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
@@ -941,4 +993,66 @@ require("lazy").setup({
 	-- Configure any other settings here. See the documentation for more details.
 	-- colorscheme that will be used when installing plugins.
 	install = { colorscheme = { "catppuccin-mocha" } },
+})
+
+-- Second Brain directory-specific configuration for Obsidian-like writing
+local second_brain_group = vim.api.nvim_create_augroup('SecondBrainSettings', { clear = true })
+
+vim.api.nvim_create_autocmd({'DirChanged', 'VimEnter'}, {
+	group = second_brain_group,
+	pattern = '*',
+	callback = function()
+		local cwd = vim.fn.getcwd()
+		
+		if cwd:match('/Users/pmelab/Documents/Second Brain') then
+			-- Apply Obsidian-like writing settings
+			vim.opt_local.wrap = true
+			vim.opt_local.linebreak = true
+			vim.opt_local.textwidth = 0
+			vim.opt_local.wrapmargin = 0
+			vim.opt_local.colorcolumn = "80"
+			vim.opt_local.conceallevel = 2
+			vim.opt_local.concealcursor = "nc"
+			vim.opt_local.spell = true
+			vim.opt_local.spelllang = "en_us"
+			
+			-- Better navigation for wrapped lines
+			vim.keymap.set("n", "j", "gj", { buffer = true, silent = true })
+			vim.keymap.set("n", "k", "gk", { buffer = true, silent = true })
+			vim.keymap.set("n", "0", "g0", { buffer = true, silent = true })
+			vim.keymap.set("n", "$", "g$", { buffer = true, silent = true })
+			
+			-- Create a keybinding to toggle zen mode
+			vim.keymap.set("n", "<leader>z", function()
+				if pcall(require, 'zen-mode') then
+					require('zen-mode').toggle()
+				end
+			end, { buffer = true, desc = "Toggle Zen Mode" })
+		end
+	end,
+})
+
+-- Additional markdown-specific settings for Second Brain
+vim.api.nvim_create_autocmd("FileType", {
+	group = second_brain_group,
+	pattern = "markdown",
+	callback = function()
+		local file_path = vim.fn.expand("%:p")
+		
+		if file_path:match('/Users/pmelab/Documents/Second Brain') then
+			-- Markdown-specific settings
+			vim.opt_local.breakindent = true
+			vim.opt_local.breakindentopt = "shift:2"
+			vim.opt_local.scrolloff = 8
+			vim.opt_local.sidescrolloff = 8
+			vim.opt_local.smoothscroll = true
+			
+			-- Auto-enable zen mode for markdown files in Second Brain
+			vim.defer_fn(function()
+				if pcall(require, 'zen-mode') then
+					require('zen-mode').open()
+				end
+			end, 100)
+		end
+	end,
 })

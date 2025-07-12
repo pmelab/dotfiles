@@ -6,13 +6,8 @@ function load_environment_variables
         return 1
     end
     
-    # Read the config file line by line
-    while read -l line
-        # Skip empty lines and comments
-        if test -z "$line"; or string match -r "^\s*#" "$line"
-            continue
-        end
-        
+    # Read the config file and filter out comments/empty lines
+    for line in (cat $config_file | string match -r -v '^\s*#|^\s*$')
         # Split line into variable name and value
         set -l parts (string split -m 1 "=" "$line")
         if test (count $parts) -ne 2
@@ -29,10 +24,11 @@ function load_environment_variables
         else if string match -q "cmd://*" "$var_value"
             # Dynamic command
             set -l command (string sub -s 7 "$var_value") # Remove "cmd://" prefix
-            set -gx $var_name (eval $command)
+            set -gx $var_name (eval $command 2>/dev/null)
         else
             # Static value
             set -gx $var_name $var_value
         end
-    end < $config_file
+    end
 end
+

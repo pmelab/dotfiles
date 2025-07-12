@@ -11,7 +11,8 @@
       "Bash(brew bundle:*)",
       "Bash(delta:*)",
       "Bash(mkdir:*)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "WebFetch(domain:github.com)"
     ],
     "deny": []
   }

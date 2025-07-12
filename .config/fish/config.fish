@@ -19,7 +19,5 @@ if status is-interactive
     # Regenerate Zellij config to ensure it's in sync with environment.conf
     ~/.dotfiles/bin/generate-zellij-config > /dev/null 2>&1
 
-    set -x ZELLIJ_AUTO_ATTACH true
     eval (zellij setup --generate-auto-start fish | string collect)
 end
-alias claude="/Users/pmelab/.claude/local/claude"
