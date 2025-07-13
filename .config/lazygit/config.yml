@@ -30,5 +30,4 @@ gui:
     "*": "#b7bdf8"
 
 os:
-  editCommand: "cursor"
-  editCommandTemplate: "{{.Editor}} {{.Filename}}"
+  edit: "nvim"
