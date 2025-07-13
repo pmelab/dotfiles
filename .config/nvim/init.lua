@@ -831,7 +831,7 @@ require("lazy").setup({
 					{
 						"<leader>gl",
 						function()
-							Snacks.picker.git_status({ staged = false })
+							require("snacks").picker.git_status({ staged = false })
 						end,
 						desc = "Git Unstaged Files",
 						icon = giticon,
@@ -839,7 +839,7 @@ require("lazy").setup({
 					{
 						"<leader>gd",
 						function()
-							Snacks.picker.git_diff({ 
+							require("snacks").picker.git_diff({ 
 								current_file = true,
 								staged = false 
 							})
