@@ -1,0 +1,9 @@
+# Posting Configuration
+# Catppuccin Mocha theme with compact layout and custom keymaps
+
+theme: catppuccin-mocha
+spacing: compact
+
+keymap:
+  # Map editor function from f4 to ctrl+e
+  open-in-editor: ctrl+e

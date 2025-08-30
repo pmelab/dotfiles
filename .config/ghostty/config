@@ -11,9 +11,9 @@ keybind = clear
 # Tab management now handled by Zellij
 # keybind = super+t=new_tab
 # keybind = super+w=close_surface
-keybind = super+q=close_all_windows
-keybind = super+c=copy_to_clipboard
-keybind = super+v=paste_from_clipboard
+ keybind = super+q=close_all_windows
+ keybind = super+c=copy_to_clipboard
+ keybind = super+v=paste_from_clipboard
 
 # Pane and tab management now handled by Zellij
 # keybind = alt+shift+h=goto_split:left

@@ -50,6 +50,8 @@ keybinds {
         bind "Super w" { CloseTab; }
         bind "Alt Shift n" { GoToPreviousTab; }
         bind "Alt Shift m" { GoToNextTab; }
+        bind "Alt Shift ," { MoveTab "left"; }
+        bind "Alt Shift ." { MoveTab "right"; }
         
         // Pane management (matching Ghostty shortcuts)
         bind "Alt Shift u" { NewPane "Down"; }
@@ -61,7 +63,7 @@ keybinds {
         bind "Alt Shift y" { TogglePaneFrames; ToggleFocusFullscreen; }
         
         // Session management
-        bind "Alt Shift o" { LaunchOrFocusPlugin "session-manager" { floating true; move_to_focused_tab true; }; }
+        bind "Alt Shift ;" { LaunchOrFocusPlugin "session-manager" { floating true; move_to_focused_tab true; }; }
         
         // System commands
         bind "Super q" { Quit; }
