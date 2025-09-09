@@ -1,0 +1,20 @@
+# WezTerm Workspace Configuration
+# This file defines workspaces that can be launched from the ShowLauncher (Alt+Shift+w)
+# Each workspace will be created with the specified working directory when selected
+
+workspaces:
+  - id: dotfiles
+    label: "🏠 Dotfiles"
+    root: "~/.dotfiles"
+
+  - id: nvim-config  
+    label: "⚙️ Neovim Config"
+    root: "~/.config/nvim"
+
+  - id: stargaze
+    label: "⭐ Stargaze Project"
+    root: "~/Code/stargaze"
+
+  - id: playground
+    label: "🧪 Playground"
+    root: "~/Code/playground"
