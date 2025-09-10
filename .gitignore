@@ -1,3 +1,4 @@
 node_modules
 .config/lazygit/state
 .config/zellij/config-env.kdl
+.cache/wezterm-env

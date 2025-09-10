@@ -23,7 +23,19 @@
       "Read(/Users/pmelab/Code/stargaze/**)",
       "Read(/Users/pmelab/Code/stargaze/**)",
       "Read(/Users/pmelab/.cache/helix/**)",
-      "Read(/Users/pmelab/Code/stargaze/**)"
+      "Read(/Users/pmelab/Code/stargaze/**)",
+      "WebSearch",
+      "WebFetch(domain:wezterm.org)",
+      "Bash(wezterm:*)",
+      "Read(//Users/pmelab/Code/stargaze/**)",
+      "Bash(fish:*)",
+      "Bash(exit)",
+      "Bash(if wezterm:*)",
+      "Bash(/dev/null)",
+      "Bash(then echo \"✅ Config loads successfully with modal plugin\")",
+      "Bash(else echo \"❌ Config has issues\")",
+      "Bash(fi)",
+      "Read(//Users/pmelab/.local/share/wezterm/**)"
     ],
     "deny": []
   }
