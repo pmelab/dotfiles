@@ -35,7 +35,9 @@
       "Bash(then echo \"✅ Config loads successfully with modal plugin\")",
       "Bash(else echo \"❌ Config has issues\")",
       "Bash(fi)",
-      "Read(//Users/pmelab/.local/share/wezterm/**)"
+      "Read(//Users/pmelab/.local/share/wezterm/**)",
+      "WebFetch(domain:wezfurlong.org)",
+      "Read(//Users/pmelab/.claude/**)"
     ],
     "deny": []
   }

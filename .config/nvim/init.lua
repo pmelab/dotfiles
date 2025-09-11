@@ -938,24 +938,6 @@ require("snacks").picker.git_status,
 			},
 		},
 		{
-			"folke/zen-mode.nvim",
-			opts = {
-				window = {
-					width = 80,
-					height = 1,
-					options = {
-						signcolumn = "no",
-						number = false,
-						relativenumber = false,
-						cursorline = false,
-						cursorcolumn = false,
-						foldcolumn = "0",
-						list = false,
-					},
-				},
-			},
-		},
-		{
 			"rcarriga/nvim-dap-ui",
 			dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
 			config = function()
@@ -1107,12 +1089,6 @@ vim.api.nvim_create_autocmd({ "DirChanged", "VimEnter" }, {
 			vim.keymap.set("n", "0", "g0", { buffer = true, silent = true })
 			vim.keymap.set("n", "$", "g$", { buffer = true, silent = true })
 
-			-- Create a keybinding to toggle zen mode
-			vim.keymap.set("n", "<leader>z", function()
-				if pcall(require, "zen-mode") then
-					require("zen-mode").toggle()
-				end
-			end, { buffer = true, desc = "Toggle Zen Mode" })
 		end
 	end,
 })
@@ -1132,12 +1108,6 @@ vim.api.nvim_create_autocmd("FileType", {
 			vim.opt_local.sidescrolloff = 8
 			vim.opt_local.smoothscroll = true
 
-			-- Auto-enable zen mode for markdown files in Second Brain
-			vim.defer_fn(function()
-				if pcall(require, "zen-mode") then
-					require("zen-mode").open()
-				end
-			end, 100)
 		end
 	end,
 })

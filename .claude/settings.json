@@ -1,0 +1,20 @@
+{
+  "model": "sonnet",
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/notification-hook.sh"
+          }
+        ]
+      }
+    ]
+  },
+  "feedbackSurveyState": {
+    "lastShownTime": 1754036444463
+  },
+  "$schema": "https://json.schemastore.org/claude-code-settings.json"
+}

@@ -28,15 +28,11 @@ tabline.setup({
 	},
 	sections = {
 		tab_active = {
-			{ "tab", padding = 0 },
-			":",
-			{ "parent", padding = { left = 1, right = 0 } },
-			"/",
-			{ "cwd", padding = { left = 0, right = 1 } },
+			{ "tab", padding = 1 },
 			"zoomed",
 		},
 		tab_inactive = {
-			{ "tab", padding = 0 },
+			{ "tab", padding = 1 },
 			"zoomed",
 		},
 	},
@@ -56,6 +52,21 @@ workspace_switcher.apply_to_config(config)
 
 -- Theme and colors
 config.color_scheme = "Catppuccin Mocha"
+
+-- Custom color overrides for better pane visibility
+config.colors = {
+	-- Make pane borders more visible
+	split = '#6c7086', -- Catppuccin Mocha overlay1 - brighter than default
+}
+
+-- Make inactive panes more visually distinct
+config.inactive_pane_hsb = {
+	saturation = 0.7,
+	brightness = 0.6,
+}
+
+-- Make inactive panes semi-transparent
+config.text_background_opacity = 0.7
 
 -- Font configuration
 config.font = wezterm.font("Rec Mono Duotone", { weight = "Regular" })

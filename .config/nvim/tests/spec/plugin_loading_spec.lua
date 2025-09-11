@@ -215,7 +215,6 @@ describe('Plugin Loading', function()
         'flash',
         'todo-comments',
         'snacks',
-        'zen-mode',
         'nvim-dap',
         'nvim-dap-ui',
       }
