@@ -6,17 +6,27 @@ if status is-interactive
     alias pu="php vendor/bin/phpunit --filter"
     fish_add_path --path /opt/homebrew/bin/
     fish_add_path --path ~/.dotfiles/npm/node_modules/.bin
+    fish_add_path --path ~/.dotfiles/bin
     fish_add_path --path ~/.local/bin
     starship init fish | source
     direnv hook fish | source
     atuin init fish | source
     zoxide init --cmd cd fish | source
-    function za
-        zellij attach $(zellij ls -s | fzf)
-    end
 
-    function zk
-        zellij kill-session $(zellij ls -s | fzf)
+    # Second Brain aliases and functions
+    alias brain="cd '$HOME/Documents/Second Brain'"
+    alias brain-serve="$HOME/.dotfiles/bin/second-brain-serve"
+    
+    function brain-new
+        cd "$HOME/Documents/Second Brain" && command zk new $argv
+    end
+    
+    function brain-search
+        cd "$HOME/Documents/Second Brain" && command zk edit --interactive $argv
+    end
+    
+    function brain-daily
+        cd "$HOME/Documents/Second Brain" && command zk daily
     end
 
     # Environment variable cache management functions
@@ -91,9 +101,6 @@ if status is-interactive
 
     # Prevent Sharp compilation issues with global libvips
     set -gx SHARP_IGNORE_GLOBAL_LIBVIPS 1
-
-    # Regenerate Zellij config to ensure it's in sync with environment.conf
-    ~/.dotfiles/bin/generate-zellij-config >/dev/null 2>&1
 
     # Load environment variables from cache (auto-creates if missing)
     load_env_cache

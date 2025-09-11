@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# Second Brain Quartz Server
+# Automatically sets up and serves Second Brain using Quartz
+
+SECOND_BRAIN_PATH="$HOME/Documents/Second Brain"
+QUARTZ_PATH="$HOME/.local/share/quartz"
+QUARTZ_CONFIG_PATH="$HOME/.dotfiles/quartz-config"
+
+# Check if Second Brain directory exists
+if [[ ! -d "$SECOND_BRAIN_PATH" ]]; then
+    echo "Error: Second Brain directory not found at $SECOND_BRAIN_PATH"
+    exit 1
+fi
+
+# Create local share directory if it doesn't exist
+mkdir -p "$HOME/.local/share"
+
+# Clone Quartz if it doesn't exist
+if [[ ! -d "$QUARTZ_PATH" ]]; then
+    echo "🚀 First run: Cloning Quartz..."
+    git clone https://github.com/jackyzha0/quartz.git "$QUARTZ_PATH"
+fi
+
+# Change to quartz directory
+cd "$QUARTZ_PATH" || exit 1
+
+# Copy config files from dotfiles template
+echo "📋 Updating Quartz configuration..."
+cp "$QUARTZ_CONFIG_PATH/quartz.config.ts" .
+
+# Remove existing content and create symlink to Second Brain
+echo "🔗 Linking Second Brain content..."
+rm -rf content
+ln -sf "$SECOND_BRAIN_PATH" content
+
+# Ensure npm dependencies are installed
+if [[ ! -d node_modules ]]; then
+    echo "📦 Installing Quartz dependencies..."
+    npm install
+fi
+
+# Start the Quartz development server
+echo "🧠 Starting Quartz server for Second Brain..."
+echo "📍 Server will be available at http://localhost:8080"
+echo "🛑 Press Ctrl+C to stop the server"
+echo ""
+npx quartz build --serve --port 8080

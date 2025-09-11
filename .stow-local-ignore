@@ -2,3 +2,5 @@ npm
 nix
 bin
 .git
+quartz
+quartz-config

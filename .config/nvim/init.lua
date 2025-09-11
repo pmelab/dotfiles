@@ -24,7 +24,7 @@ end
 
 -- Search for Drupal root directory in silverback projects
 local function silverback_drupal_root(fname)
-	local root = require("lspconfig/util").root_pattern { "pnpm-lock.yaml" }(fname)
+	local root = require("lspconfig.util").root_pattern { "pnpm-lock.yaml" }(fname)
 	if root and vim.fn.filereadable(root .. "/apps/silverback-drupal/composer.json") == 1 then
 		return root .. "/apps/silverback-drupal"
 	end
@@ -35,7 +35,7 @@ local function silverback_drupal_root(fname)
 		return root
 	end
 	-- Fallback to composer.json root pattern if no pnpm-lock.yaml found
-	return require("lspconfig/util").root_pattern { "composer.json" }(fname)
+	return require("lspconfig.util").root_pattern { "composer.json" }(fname)
 end
 
 -- Check if Pint is available in the project
@@ -48,7 +48,7 @@ end
 
 -- Detect if current file is in a Laravel project
 local function is_laravel_project(cwd)
-	local root = require("lspconfig/util").root_pattern { "artisan", "composer.json" }(cwd)
+	local root = require("lspconfig.util").root_pattern { "artisan", "composer.json" }(cwd)
 	if root and vim.fn.filereadable(root .. "/artisan") == 1 then
 		return true
 	end
@@ -57,7 +57,7 @@ end
 
 -- Detect if current file is in a Drupal project
 local function is_drupal_project(cwd)
-	local root = require("lspconfig/util").root_pattern { "composer.json" }(cwd)
+	local root = require("lspconfig.util").root_pattern { "composer.json" }(cwd)
 	if root and vim.fn.filereadable(root .. "/composer.json") == 1 then
 		-- Check if it's a Drupal project by looking for drupal/core in composer.json
 		local composer_content = vim.fn.readfile(root .. "/composer.json")
@@ -71,7 +71,7 @@ end
 
 -- Detect if current file is in a Storybook project
 local function is_storybook_project(cwd)
-	local root = require("lspconfig/util").root_pattern { "package.json", ".storybook" }(cwd)
+	local root = require("lspconfig.util").root_pattern { "package.json", ".storybook" }(cwd)
 	if root then
 		-- Check for .storybook directory
 		if vim.fn.isdirectory(root .. "/.storybook") == 1 then
@@ -91,7 +91,7 @@ end
 
 -- Detect if current file is in a Python project
 local function is_python_project(cwd)
-	local root = require("lspconfig/util").root_pattern {
+	local root = require("lspconfig.util").root_pattern {
 		"pyproject.toml",
 		"requirements.txt",
 		"setup.py",
@@ -99,6 +99,20 @@ local function is_python_project(cwd)
 		"poetry.lock",
 	}(cwd)
 	if root then
+		return true
+	end
+	return false
+end
+
+-- Detect if current file is in Second Brain directory
+local function is_second_brain_project(cwd)
+	-- Check if current working directory or any file path is within Second Brain
+	if cwd:match "/Users/pmelab/Documents/Second Brain" then
+		return true
+	end
+	-- Also check current buffer file path
+	local current_file = vim.fn.expand("%:p")
+	if current_file and current_file:match "/Users/pmelab/Documents/Second Brain" then
 		return true
 	end
 	return false
@@ -178,7 +192,7 @@ require("lazy").setup {
 					phpcbf = {
 						cwd = function(self, ctx)
 							-- Find the root directory containing phpcs.xml.dist or composer.json
-							local root = require("lspconfig/util").root_pattern { "phpcs.xml.dist", "composer.json" }(ctx.filename)
+							local root = require("lspconfig.util").root_pattern { "phpcs.xml.dist", "composer.json" }(ctx.filename)
 							return root
 						end,
 					},
@@ -198,7 +212,7 @@ require("lazy").setup {
 					blade = { "blade-formatter" },
 					php = function(bufnr)
 						local fname = vim.api.nvim_buf_get_name(bufnr)
-						local root_dir = require("lspconfig/util").root_pattern { "composer.json" }(fname)
+						local root_dir = require("lspconfig.util").root_pattern { "composer.json" }(fname)
 
 						if has_pint(root_dir) then
 							return { "pint" }
@@ -232,6 +246,7 @@ require("lazy").setup {
 					"graphql-language-service-cli",
 					"tailwindcss-language-server",
 					"marksman",
+					"zk",
 					"pyright",
 					"black",
 					"debugpy",
@@ -251,7 +266,9 @@ require("lazy").setup {
 							{
 								function()
 									local cwd = vim.fn.getcwd()
-									if is_laravel_project(cwd) then
+									if is_second_brain_project(cwd) then
+										return "󰋺 Second Brain"
+									elseif is_laravel_project(cwd) then
 										return "󰫐 Laravel"
 									elseif is_drupal_project(cwd) then
 										return "󰇤 Drupal"
@@ -264,7 +281,9 @@ require("lazy").setup {
 								end,
 								color = function()
 									local cwd = vim.fn.getcwd()
-									if is_laravel_project(cwd) then
+									if is_second_brain_project(cwd) then
+										return { fg = "#a78bfa", gui = "bold" }
+									elseif is_laravel_project(cwd) then
 										return { fg = "#ff6b6b", gui = "bold" }
 									elseif is_drupal_project(cwd) then
 										return { fg = "#0678be", gui = "bold" }
@@ -680,7 +699,7 @@ require("lazy").setup {
 					root_dir = function(fname)
 						local cwd = vim.fn.fnamemodify(fname, ":h")
 						if is_laravel_project(cwd) then
-							return require("lspconfig/util").root_pattern { "artisan", "composer.json" }(fname)
+							return require("lspconfig.util").root_pattern { "artisan", "composer.json" }(fname)
 						end
 						return nil -- Don't attach if not Laravel
 					end,
@@ -736,7 +755,34 @@ require("lazy").setup {
 				}
 				lspconfig.tailwindcss.setup {}
 				lspconfig.nil_ls.setup {}
-				lspconfig.marksman.setup {}
+				-- Marksman LSP - only attach when NOT in Second Brain directory
+				lspconfig.marksman.setup {
+					root_dir = function(fname)
+						local file_path = vim.fn.fnamemodify(fname, ":p")
+						-- Don't attach marksman if in Second Brain directory
+						if file_path:match "/Users/pmelab/Documents/Second Brain" then
+							return nil
+						end
+						return require("lspconfig.util").root_pattern { ".git" }(fname) or vim.fn.fnamemodify(fname, ":h")
+					end,
+					-- Add explicit on_attach function to double-check exclusion
+					on_attach = function(client, bufnr)
+						local buf_name = vim.api.nvim_buf_get_name(bufnr)
+						local file_path = vim.fn.fnamemodify(buf_name, ":p")
+						-- Emergency check: if we're in Second Brain directory, detach immediately
+						if file_path:match "/Users/pmelab/Documents/Second Brain" then
+							vim.notify("Marksman incorrectly attached to Second Brain file - detaching", vim.log.levels.WARN)
+							vim.lsp.buf_detach_client(bufnr, client.id)
+							return
+						end
+					end,
+					-- Add filetypes to ensure it only handles markdown
+					filetypes = { "markdown" },
+					-- Explicitly set single_file_support to false to prevent it from 
+					-- attaching to files without a proper root directory
+					single_file_support = false,
+				}
+				-- zk LSP setup is handled by the zk-nvim plugin (see plugin configuration below)
 				-- python
 				lspconfig.pyright.setup {}
 
@@ -794,6 +840,8 @@ require("lazy").setup {
 						"fish",
 						"html",
 						"markdown",
+						"markdown_inline",
+						"mermaid",
 						"gitcommit",
 						"python",
 						"hurl",
@@ -1056,6 +1104,40 @@ require("snacks").picker.git_status,
 				}
 			end,
 		},
+		{
+			"zk-org/zk-nvim",
+			config = function()
+				require("zk").setup {
+					-- Enable picking directory-aware notebook
+					picker = "snacks_picker",
+
+					-- Let zk-nvim handle LSP setup automatically
+					lsp = {
+						-- Use default LSP configuration
+						config = {
+							cmd = { "zk", "lsp" },
+							name = "zk",
+							-- Only attach zk LSP in Second Brain directory
+							root_dir = function(fname)
+								local file_path = vim.fn.fnamemodify(fname, ":p")
+								-- Only attach zk if in Second Brain directory
+								if file_path:match "/Users/pmelab/Documents/Second Brain" then
+									return "/Users/pmelab/Documents/Second Brain"
+								end
+								return nil
+							end,
+							single_file_support = false,
+						},
+
+						-- Automatically attach to markdown files in notebooks
+						auto_attach = {
+							enabled = true,
+							filetypes = { "markdown" },
+						},
+					},
+				}
+			end,
+		},
 	},
 	-- Configure any other settings here. See the documentation for more details.
 	-- colorscheme that will be used when installing plugins.
@@ -1089,6 +1171,62 @@ vim.api.nvim_create_autocmd({ "DirChanged", "VimEnter" }, {
 			vim.keymap.set("n", "0", "g0", { buffer = true, silent = true })
 			vim.keymap.set("n", "$", "g$", { buffer = true, silent = true })
 
+			-- Set up zk-specific keybindings
+			local wk = require "which-key"
+			local zk = require "zk"
+
+			wk.add {
+				{ "<leader>z", group = "Zettelkasten", icon = "󰍗" },
+				{
+					"<leader>zn",
+					function()
+						zk.new { dir = vim.fn.getcwd() }
+					end,
+					desc = "New Note",
+					icon = "󰈔",
+				},
+				{
+					"<leader>zo",
+					function()
+						zk.edit()
+					end,
+					desc = "Open Note Browser",
+					icon = "󰈶",
+				},
+				{
+					"<leader>zf",
+					function()
+						zk.edit({}, { picker = "snacks_picker" })
+					end,
+					desc = "Find Notes",
+					icon = "󰍉",
+				},
+				{
+					"<leader>zr",
+					function()
+						zk.edit({ linkTo = { vim.api.nvim_buf_get_name(0) } }, { picker = "snacks_picker" })
+					end,
+					desc = "Find References/Backlinks",
+					icon = "󰌹",
+				},
+				{
+					"<leader>zt",
+					function()
+						zk.edit({ tags = { vim.fn.input "Tag: " } }, { picker = "snacks_picker" })
+					end,
+					desc = "Search by Tags",
+					icon = "󰓹",
+				},
+				{
+					"<leader>zd",
+					function()
+						zk.new { dir = vim.fn.getcwd(), template = "daily.md" }
+					end,
+					desc = "Create Daily Note",
+					icon = "󰃰",
+				},
+			}
+
 		end
 	end,
 })
@@ -1108,6 +1246,30 @@ vim.api.nvim_create_autocmd("FileType", {
 			vim.opt_local.sidescrolloff = 8
 			vim.opt_local.smoothscroll = true
 
+			-- Enable wiki-link support for zk notebooks
+			vim.opt_local.iskeyword:append("-")  -- Allow dashes in keywords for wiki links
+
+		end
+	end,
+})
+
+-- Safety autocmd to prevent marksman from attaching in Second Brain
+vim.api.nvim_create_autocmd("LspAttach", {
+	group = second_brain_group,
+	pattern = "*",
+	callback = function(event)
+		local client = vim.lsp.get_client_by_id(event.data.client_id)
+		if not client then return end
+		
+		-- Check if this is marksman attaching to a Second Brain file
+		if client.name == "marksman" then
+			local buf_name = vim.api.nvim_buf_get_name(event.buf)
+			local file_path = vim.fn.fnamemodify(buf_name, ":p")
+			
+			if file_path:match "/Users/pmelab/Documents/Second Brain" then
+				vim.notify("Preventing marksman from attaching in Second Brain directory", vim.log.levels.INFO)
+				vim.lsp.buf_detach_client(event.buf, client.id)
+			end
 		end
 	end,
 })

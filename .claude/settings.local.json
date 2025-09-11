@@ -37,7 +37,12 @@
       "Bash(fi)",
       "Read(//Users/pmelab/.local/share/wezterm/**)",
       "WebFetch(domain:wezfurlong.org)",
-      "Read(//Users/pmelab/.claude/**)"
+      "Read(//Users/pmelab/.claude/**)",
+      "Read(//Users/pmelab/Documents/Second Brain/**)",
+      "Bash(lua:*)",
+      "Read(//Users/pmelab/.local/share/nvim/lazy/zk-nvim/lua/zk/**)",
+      "WebFetch(domain:quartz.jzhao.xyz)",
+      "Bash(bash:*)"
     ],
     "deny": []
   }
