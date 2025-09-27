@@ -35,6 +35,14 @@ tabline.setup({
 			{ "tab", padding = 1 },
 			"zoomed",
 		},
+		-- Remove all right-hand elements
+		tabline_x = {},
+		tabline_y = {},
+		tabline_z = {},
+		-- Show workspace as first element
+		tabline_a = { "workspace" },
+		tabline_b = {},
+		tabline_c = {},
 	},
 })
 
@@ -56,7 +64,7 @@ config.color_scheme = "Catppuccin Mocha"
 -- Custom color overrides for better pane visibility
 config.colors = {
 	-- Make pane borders more visible
-	split = '#6c7086', -- Catppuccin Mocha overlay1 - brighter than default
+	split = "#6c7086", -- Catppuccin Mocha overlay1 - brighter than default
 }
 
 -- Make inactive panes more visually distinct
@@ -65,12 +73,16 @@ config.inactive_pane_hsb = {
 	brightness = 0.6,
 }
 
--- Make inactive panes semi-transparent
-config.text_background_opacity = 0.7
+-- Ensure completely solid background (no transparency)
+config.text_background_opacity = 1.0
+config.window_background_opacity = 1.0
 
 -- Font configuration
-config.font = wezterm.font("Rec Mono Duotone", { weight = "Regular" })
-config.font_size = 14.0
+config.font = wezterm.font_with_fallback({
+	"Geist Mono",
+	"Symbols Nerd Font Mono",
+})
+config.font_size = 16.0
 
 -- Window and pane padding
 config.window_padding = {

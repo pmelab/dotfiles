@@ -13,21 +13,9 @@ if status is-interactive
     atuin init fish | source
     zoxide init --cmd cd fish | source
 
-    # Second Brain aliases and functions
+    # Second Brain aliases
     alias brain="cd '$HOME/Documents/Second Brain'"
     alias brain-serve="$HOME/.dotfiles/bin/second-brain-serve"
-    
-    function brain-new
-        cd "$HOME/Documents/Second Brain" && command zk new $argv
-    end
-    
-    function brain-search
-        cd "$HOME/Documents/Second Brain" && command zk edit --interactive $argv
-    end
-    
-    function brain-daily
-        cd "$HOME/Documents/Second Brain" && command zk daily
-    end
 
     # Environment variable cache management functions
     function update_env_cache

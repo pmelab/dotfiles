@@ -42,7 +42,8 @@
       "Bash(lua:*)",
       "Read(//Users/pmelab/.local/share/nvim/lazy/zk-nvim/lua/zk/**)",
       "WebFetch(domain:quartz.jzhao.xyz)",
-      "Bash(bash:*)"
+      "Bash(bash:*)",
+      "WebFetch(domain:nikitabobko.github.io)"
     ],
     "deny": []
   }

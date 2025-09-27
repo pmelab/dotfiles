@@ -1,0 +1,166 @@
+# AeroSpace Configuration
+# Place a copy of this config to ~/.aerospace.toml
+# After that, you can edit ~/.aerospace.toml to your liking
+
+# Start at login (optional)
+start-at-login = true
+
+# Normalizations. See: https://nikitabobko.github.io/AeroSpace/guide#normalization
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+
+# See: https://nikitabobko.github.io/AeroSpace/guide#layouts
+# The 'accordion-padding' specifies the size of accordion padding
+# You can set 0 to disable the padding feature
+accordion-padding = 8
+
+# Possible values: tiles|accordion
+default-root-container-layout = 'accordion'
+
+# Possible values: horizontal|vertical|auto
+default-root-container-orientation = 'horizontal'
+
+# Mouse follows focus when focused monitor changes
+# Drop it from your config, if you don't like this behavior
+# See https://nikitabobko.github.io/AeroSpace/guide#on-focus-changed-callbacks
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+
+# JankyBorders integration - start borders on AeroSpace startup
+after-startup-command = [
+    # JankyBorders has a built-in detection of already running process,
+    # so it won't be run twice on AeroSpace restart
+    'exec-and-forget borders active_color=0xfffab387 inactive_color=0x00000000 width=5.0'
+]
+
+# You can effectively turn off macOS "Hide application" (cmd-h) feature by toggling this flag
+# Useful if you don't use this macOS feature, but accidentally hit cmd-h or cmd-alt-h
+automatically-unhide-macos-hidden-apps = false
+
+# Gaps between windows (inner-*) and between monitor edges (outer-*)
+# Possible values:
+# - Constant: gaps.outer.top = 8
+# - Per monitor: gaps.outer.top = [{ monitor.main = 16 }, { monitor."some-pattern" = 32 }, 8]
+#   Where 8 is a default value when there is no match.
+[gaps]
+inner.horizontal = 4
+inner.vertical =   4
+outer.left =       4
+outer.bottom =     4
+outer.top =        4
+outer.right =      4
+
+# Window detection rules for automatic workspace assignment
+[[on-window-detected]]
+if.app-id = 'com.apple.finder'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
+run = 'move-node-to-workspace Chat'
+
+[[on-window-detected]]
+if.app-id = 'us.zoom.xos'
+run = 'move-node-to-workspace Zoom'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.iCal'
+run = 'move-node-to-workspace Utilities'
+
+[[on-window-detected]]
+if.app-id = 'com.culturedcode.ThingsMac'
+run = 'move-node-to-workspace Utilities'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.mail'
+run = 'move-node-to-workspace Utilities'
+
+[[on-window-detected]]
+if.app-id = 'com.1password.1password'
+run = 'move-node-to-workspace Utilities'
+
+[[on-window-detected]]
+if.app-id = 'com.anthropic.claudefordesktop'
+run = 'move-node-to-workspace Research'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.MobileSMS'
+run = 'move-node-to-workspace Utilities'
+
+[[on-window-detected]]
+if.app-id = 'net.whatsapp.WhatsApp'
+run = 'move-node-to-workspace Utilities'
+
+[mode.main.binding]
+
+# Window navigation (vim-style with alt+ctrl) - with wrap-around cycling
+alt-ctrl-h = 'focus --boundaries-action wrap-around-the-workspace left'
+alt-ctrl-j = 'focus --boundaries-action wrap-around-the-workspace down'
+alt-ctrl-k = 'focus --boundaries-action wrap-around-the-workspace up'
+alt-ctrl-l = 'focus --boundaries-action wrap-around-the-workspace right'
+
+# Window management mode
+alt-ctrl-n = ['exec-and-forget borders active_color=0xff89b4fa inactive_color=0x00000000 width=5.0', 'exec-and-forget sleep 0.1 && borders active_color=0xff89b4fa inactive_color=0x00000000 width=5.0', 'mode window']
+
+# Workspace switching - App-specific (hjkl) and Project workspaces (yuiop)
+cmd-ctrl-h = 'workspace Chat'        # Slack
+cmd-ctrl-j = 'workspace Zoom'        # Zoom
+cmd-ctrl-k = 'workspace Utilities'   # Calendar, Things, Mail, 1Password
+cmd-ctrl-l = 'workspace Research'    # Claude
+
+cmd-ctrl-y = 'workspace Project1'
+cmd-ctrl-u = 'workspace Project2'
+cmd-ctrl-i = 'workspace Project3'
+cmd-ctrl-o = 'workspace Project4'
+cmd-ctrl-p = 'workspace Project5'
+
+# Move window to workspace
+cmd-ctrl-shift-h = 'move-node-to-workspace Chat'
+cmd-ctrl-shift-j = 'move-node-to-workspace Zoom'
+cmd-ctrl-shift-k = 'move-node-to-workspace Utilities'
+cmd-ctrl-shift-l = 'move-node-to-workspace Research'
+
+cmd-ctrl-shift-y = 'move-node-to-workspace Project1'
+cmd-ctrl-shift-u = 'move-node-to-workspace Project2'
+cmd-ctrl-shift-i = 'move-node-to-workspace Project3'
+cmd-ctrl-shift-o = 'move-node-to-workspace Project4'
+cmd-ctrl-shift-p = 'move-node-to-workspace Project5'
+
+# Monitor management
+cmd-ctrl-tab = 'move-workspace-to-monitor next'
+
+# Useful shortcuts
+alt-ctrl-y = 'fullscreen'
+alt-ctrl-space = 'layout floating tiling'
+alt-ctrl-r = 'flatten-workspace-tree'
+
+# See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
+# 'service' binding mode declaration.
+# See: https://nikitabobko.github.io/AeroSpace/guide#mode-service
+[mode.service.binding]
+esc = ['reload-config', 'mode main']
+r = ['flatten-workspace-tree', 'mode main'] # reset layout
+f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout
+backspace = ['close-all-windows-but-current', 'mode main']
+
+alt-ctrl-semicolon = 'mode service'
+
+# Window management mode - combined move and join with layout controls
+[mode.window.binding]
+# Move windows with hjkl
+h = 'move left'
+j = 'move down'
+k = 'move up'
+l = 'move right'
+
+# Join windows with shift+hjkl
+shift-h = 'join-with left'
+shift-j = 'join-with down'
+shift-k = 'join-with up'
+shift-l = 'join-with right'
+
+# Layout controls
+n = 'layout h_tiles v_tiles'  # Toggle orientation
+m = 'layout tiles accordion'  # Toggle between tiles and accordion
+
+# Exit to main mode
+esc = ['exec-and-forget borders active_color=0xfffab387 inactive_color=0x00000000 width=5.0', 'mode main']

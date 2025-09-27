@@ -1,30 +1,28 @@
-theme = catppuccin-mocha
-macos-titlebar-style = hidden
-font-size = 14
-font-family = RecMonoDuotone Nerd Font Mono
+theme = Catppuccin Mocha
+font-size = 16
+font-family = Geist Mono
 window-padding-x = 4
 window-padding-y = 2
 cursor-color = #f0c6c6
 cursor-text = #181926
 
 keybind = clear
-# Tab management now handled by Zellij
-# keybind = super+t=new_tab
-# keybind = super+w=close_surface
- keybind = super+q=close_all_windows
- keybind = super+c=copy_to_clipboard
- keybind = super+v=paste_from_clipboard
+keybind = cmd+t=new_window
+keybind = cmd+w=close_surface
+keybind = cmd+q=close_all_windows
+keybind = cmd+c=copy_to_clipboard
+keybind = cmd+v=paste_from_clipboard
 
 # Pane and tab management now handled by Zellij
-# keybind = alt+shift+h=goto_split:left
-# keybind = alt+shift+j=goto_split:bottom
-# keybind = alt+shift+k=goto_split:top
-# keybind = alt+shift+l=goto_split:right
-# keybind = alt+shift+n=previous_tab
-# keybind = alt+shift+m=next_tab
-# keybind = alt+shift+u=new_split:down
-# keybind = alt+shift+i=new_split:right
-# keybind = alt+shift+y=toggle_split_zoom
+keybind = alt+shift+h=goto_split:left
+keybind = alt+shift+j=goto_split:bottom
+keybind = alt+shift+k=goto_split:top
+keybind = alt+shift+l=goto_split:right
+keybind = alt+shift+n=previous_tab
+keybind = alt+shift+m=next_tab
+keybind = alt+shift+u=new_split:down
+keybind = alt+shift+i=new_split:right
+keybind = alt+shift+y=toggle_split_zoom
 
 keybind = alt+shift+o=decrease_font_size:1
 keybind = alt+shift+p=increase_font_size:1
