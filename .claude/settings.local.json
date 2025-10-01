@@ -43,7 +43,10 @@
       "Read(//Users/pmelab/.local/share/nvim/lazy/zk-nvim/lua/zk/**)",
       "WebFetch(domain:quartz.jzhao.xyz)",
       "Bash(bash:*)",
-      "WebFetch(domain:nikitabobko.github.io)"
+      "WebFetch(domain:nikitabobko.github.io)",
+      "WebFetch(domain:manual.raycast.com)",
+      "WebFetch(domain:chromium.googlesource.com)",
+      "Read(//Users/pmelab/Library/**)"
     ],
     "deny": []
   }

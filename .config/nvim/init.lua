@@ -131,6 +131,17 @@ vim.opt.signcolumn = "yes"
 vim.opt.showmode = false
 vim.opt.clipboard = "unnamedplus"
 
+-- Auto-reload files changed on disk
+vim.opt.autoread = true
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
+	pattern = "*",
+	callback = function()
+		if vim.fn.mode() ~= "c" then
+			vim.cmd("checktime")
+		end
+	end,
+})
+
 -- Treesitter based code folding
 vim.opt.foldenable = false
 vim.opt.foldmethod = "expr"
