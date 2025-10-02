@@ -1,20 +1,26 @@
 export default {
-  defaultBrowser: "Google Chrome",
+  defaultBrowser: (options) => ({
+    name: "Google Chrome",
+    profile: "Profile 1",
+    args: ["--app=" + options.urlString],
+  }),
   handlers: [
     {
-      // YouTube → Chrome "Privat" profile
+      // YouTube, Amazon → Chrome "Privat" profile (app mode - chromeless)
       match: [
         "youtube.com/*",
         "*.youtube.com/*",
+        "amazon.com/*",
+        "*.amazon.com/*",
       ],
-      browser: {
+      browser: (options) => ({
         name: "Google Chrome",
         profile: "Profile 4",
-        args: ["--new-window"],
-      },
+        args: ["--app=" + options.urlString],
+      }),
     },
     {
-      // Jira, Google Docs, Confluence, GitHub, Drupal.org → Chrome "Work" profile
+      // Jira, Google Docs, Confluence, GitHub, Drupal.org, Amazee → Chrome "Work" profile (app mode - chromeless)
       match: [
         /.*\.atlassian\.net.*/,
         "docs.google.com/*",
@@ -23,25 +29,26 @@ export default {
         "*.github.com/*",
         "drupal.org/*",
         "*.drupal.org/*",
+        /.*amazee.*/,
       ],
-      browser: {
+      browser: (options) => ({
         name: "Google Chrome",
         profile: "Profile 1",
-        args: ["--new-window"],
-      },
+        args: ["--app=" + options.urlString],
+      }),
     },
     {
-      // Localhost → Chrome "Development" profile
+      // Localhost → Chrome "Development" profile (app mode - chromeless)
       match: [
         "localhost*",
         "127.0.0.1*",
         "*.localhost*",
       ],
-      browser: {
+      browser: (options) => ({
         name: "Google Chrome",
         profile: "Profile 5",
-        args: ["--new-window"],
-      },
+        args: ["--app=" + options.urlString],
+      }),
     },
   ],
 };
