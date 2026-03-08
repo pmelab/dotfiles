@@ -1,0 +1,5 @@
+[flavor]
+deps = [{ use = "kmlupreti/ayu-dark", rev = "441a38d" }]
+
+[plugin]
+deps = [{ use = "Reledia/glow", rev = "5ce76dc" }, { use = "dedukun/bookmarks", rev = "202e450" }]

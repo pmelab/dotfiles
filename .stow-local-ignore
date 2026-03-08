@@ -1,0 +1,8 @@
+npm
+nix
+bin
+.git
+quartz
+quartz-config
+dot-claude/agents
+.gitignore

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -e
+
+# Extract repo and run ID from URL
+# URL format: https://github.com/OWNER/REPO/actions/runs/RUN_ID
+url="$1"
+repo=$(echo "$url" | sed -E 's|https://github.com/([^/]+/[^/]+)/actions/runs/.*|\1|')
+run_id=$(echo "$url" | sed -E 's|.*/runs/([0-9]+).*|\1|')
+
+# Create temp dir, download artifact, view report
+tmpdir=$(mktemp -d)
+trap "rm -rf '$tmpdir'" EXIT
+gh run download "$run_id" -R "$repo" -n "playwright-report" -D "$tmpdir"
+npx playwright show-report "$tmpdir"

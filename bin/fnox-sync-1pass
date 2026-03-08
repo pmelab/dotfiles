@@ -1,0 +1,71 @@
+#!/usr/bin/env fish
+
+# Sync all passwords from 1Password "Development" vault into fnox as age-encrypted.
+# 1Password is source of truth; fnox set requires a TTY so we encrypt directly with age.
+
+set -l config ~/.config/fnox/config.toml
+
+# Bootstrap: load OP_SERVICE_ACCOUNT_TOKEN from fnox if not already set
+if not set -q OP_SERVICE_ACCOUNT_TOKEN
+    echo "Loading OP_SERVICE_ACCOUNT_TOKEN from fnox..."
+    set -gx OP_SERVICE_ACCOUNT_TOKEN (fnox get OP_SERVICE_ACCOUNT_TOKEN --config $config 2>/dev/null)
+    if test $status -ne 0
+        echo "Error: cannot load OP_SERVICE_ACCOUNT_TOKEN from fnox" >&2
+        exit 1
+    end
+else
+    echo "OP_SERVICE_ACCOUNT_TOKEN already set"
+end
+
+# Get age recipient from config.toml
+set -l recipient (grep recipients $config | string match -r 'age1[a-z0-9]+')
+if test -z "$recipient"
+    echo "Error: no age recipient found in $config" >&2
+    exit 1
+end
+
+# List all items from 1Password Development vault
+echo "Fetching items from 1Password Development vault..."
+set -l titles (op item list --vault Development --format json 2>/dev/null | jq -r '.[].title')
+if test $status -ne 0 -o (count $titles) -eq 0
+    echo "Error: failed to list vault items" >&2
+    exit 1
+end
+
+echo "Found "(count $titles)" items"
+set -l synced 0
+set -l skipped 0
+
+for name in $titles
+    # Skip OP_SERVICE_ACCOUNT_TOKEN — already age-encrypted as bootstrap
+    if test "$name" = OP_SERVICE_ACCOUNT_TOKEN
+        echo "  skip: $name (bootstrap)"
+        set skipped (math $skipped + 1)
+        continue
+    end
+
+    echo -n "  $name: reading... "
+    set -l value (op read "op://Development/$name/password" 2>/dev/null | string collect)
+    if test $status -ne 0
+        echo "SKIP (no password field)"
+        set skipped (math $skipped + 1)
+        continue
+    end
+
+    echo -n "encrypting... "
+    set -l encrypted (printf '%s' $value | age -e -r $recipient | base64 | tr -d '\n')
+    if test $status -ne 0 -o -z "$encrypted"
+        echo "FAIL (age)"
+        set skipped (math $skipped + 1)
+        continue
+    end
+
+    # Remove old line if exists, append new age-encrypted line
+    sed -i '' "/^$name *=/d" $config
+    echo "$name = { provider = \"age\", value = \"$encrypted\" }" >>$config
+    echo "ok"
+    set synced (math $synced + 1)
+end
+
+echo ""
+echo "Done: $synced synced, $skipped skipped"

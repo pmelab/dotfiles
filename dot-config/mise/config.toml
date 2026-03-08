@@ -1,0 +1,35 @@
+# Mise global configuration
+# Manages development tools similar to how Brewfile manages system packages
+# 
+# Usage:
+#   mise install          - Install all declared tools
+#   mise use -g tool@ver  - Add new global tool (updates this file)
+#   mise upgrade          - Update all tools to latest matching versions
+
+[plugins]
+mise-env-fnox = "https://github.com/jdx/mise-env-fnox"
+
+[env]
+_.mise-env-fnox = {}
+EDITOR = "nvim"
+OP_ACCOUNT = "my.1password.com"
+AMAZEEAI_BASE_URL = "https://llm.us104.amazee.ai"
+AMAZEE_AI_DEFAULT_REGION_ID = "68"
+AMAZEE_AI_TEAM_ID = "166"
+AMAZEE_AI_ENDPOINT = "https://backend.main.amazeeai.us2.amazee.io"
+SHARP_IGNORE_GLOBAL_LIBVIPS = "1"
+DOCKER_HOST = "unix://{{env.HOME}}/.lima/default/sock/docker.sock"
+
+[tools]
+# Global development tools (fuzzy versions for flexibility)
+node = "25"          # Latest 25.x
+pnpm = "10"          # Latest 10.x
+prettier = "3"       # Latest 3.x
+pitchfork = "latest" # Process manager - always use latest
+"npm:yaml-language-server" = "latest"
+"npm:@mariozechner/pi-coding-agent" = "latest"
+
+[settings]
+experimental = true
+trusted_config_paths = ["~/Code"]
+lockfile = true

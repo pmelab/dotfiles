@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+: "${AMAZEEAI_BASE_URL:?AMAZEEAI_BASE_URL not set}"
+: "${AMAZEEAI_API_KEY:?AMAZEEAI_API_KEY not set}"
+
+response=$(curl -s "${AMAZEEAI_BASE_URL}/key/info" \
+  -H "Authorization: Bearer ${AMAZEEAI_API_KEY}" \
+  -H "Content-Type: application/json")
+
+if ! echo "$response" | jq -e '.info' >/dev/null 2>&1; then
+  echo "Error: Failed to fetch key info" >&2
+  echo "$response" >&2
+  exit 1
+fi
+
+name=$(echo "$response" | jq -r '.info.key_alias // "Unknown"')
+spend=$(echo "$response" | jq -r '.info.spend // 0')
+max_budget=$(echo "$response" | jq -r '.info.max_budget // "unlimited"')
+budget_duration=$(echo "$response" | jq -r '.info.budget_duration // "N/A"')
+budget_reset_at=$(echo "$response" | jq -r '.info.budget_reset_at // "N/A"')
+expires=$(echo "$response" | jq -r '.info.expires // "N/A"')
+rpm_limit=$(echo "$response" | jq -r '.info.rpm_limit // "N/A"')
+
+if [[ "$max_budget" != "null" && "$max_budget" != "unlimited" ]]; then
+  pct=$(echo "scale=1; $spend / $max_budget * 100" | bc)
+  budget_str="\$$(printf '%.2f' "$spend") / \$$(printf '%.0f' "$max_budget") (${pct}%)"
+else
+  budget_str="\$$(printf '%.2f' "$spend")"
+fi
+
+reset_date="${budget_reset_at%%T*}"
+expires_date="${expires%%T*}"
+
+echo "Amazee.ai Balance: $name"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo -e "Spent:     $budget_str"
+echo "Resets:    $reset_date ($budget_duration)"
+echo "Expires:   $expires_date"
+echo "Rate:      $rpm_limit rpm"

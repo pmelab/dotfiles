@@ -1,0 +1,12 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+[nix_shell]
+format = '$symbol'
+symbol = '󱄅 '
+
+[nodejs]
+disabled = true
+
+[direnv]
+disabled = false
+symbol = ' '
