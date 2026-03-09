@@ -24,6 +24,10 @@ mise install
 # build bat theme cache (Catppuccin)
 bat cache --build
 
+# restore cmux preferences
+defaults import com.cmuxterm.app ~/.dotfiles/macos/com.cmuxterm.app.plist
+# (re-export after changing cmux settings: defaults export com.cmuxterm.app ~/.dotfiles/macos/com.cmuxterm.app.plist)
+
 # restore secrets (age key for fnox)
 op document get "fnox age key" --vault Development --out-file ~/.config/fnox/age.txt
 ```
@@ -54,6 +58,7 @@ dot-config/
   yazi/              File manager
 dot-gitconfig        Git config (delta, SSH signing via 1Password)
 Brewfile             All homebrew dependencies
+macos/               macOS app preferences (restore with `defaults import`)
 bin/                 Custom scripts
 ```
 
