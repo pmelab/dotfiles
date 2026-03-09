@@ -37,6 +37,7 @@ dot-agents/          AI agent skills lock file (~/.agents/)
 dot-config/
   atuin/             Shell history with sync
   bat/               Cat replacement (Catppuccin theme)
+  ghostty/           Terminal emulator (Catppuccin Mocha, Geist Mono)
   btop/              System monitor
   fish/              Shell config, aliases, env vars
   fnox/              Secrets management (age encryption)
