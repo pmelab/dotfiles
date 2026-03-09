@@ -14,8 +14,6 @@ if status is-interactive
     if command -q gh
         if not gh extension list | string match -q '*dlvhdr/gh-dash*'
             gh extension install dlvhdr/gh-dash
-        else
-            gh extension upgrade gh-dash 2>/dev/null &
         end
     end
 
@@ -38,3 +36,8 @@ if status is-interactive
 else
     mise activate fish --shims | source
 end
+
+# Added by LM Studio CLI (lms)
+set -gx PATH $PATH /Users/pmelab/.lmstudio/bin
+# End of LM Studio CLI section
+

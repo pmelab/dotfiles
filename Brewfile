@@ -31,6 +31,7 @@ cask "font-symbols-only-nerd-font"
 
 # Editing
 brew "nvim"
+brew "uv"
 brew "marksman"
 
 # Dev workflow
@@ -64,3 +65,4 @@ cask "display-pilot"
 cask "deskpad"
 cask "slack"
 cask "claude"
+cask "lm-studio"
