@@ -9,7 +9,8 @@ Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/). m
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 # clone and stow
-git clone git@github.com:<user>/dotfiles.git ~/.dotfiles
+# Note: clone via HTTPS first since SSH isn't configured yet
+git clone https://github.com/<user>/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 brew bundle
 stow .
@@ -23,6 +24,9 @@ mise install
 
 # build bat theme cache (Catppuccin)
 bat cache --build
+
+# enable 1Password SSH agent (1Password > Settings > Developer > Use the SSH Agent)
+# then add your SSH key to 1Password if not already there
 
 # restore cmux preferences
 defaults import com.cmuxterm.app ~/.dotfiles/macos/com.cmuxterm.app.plist
@@ -56,6 +60,8 @@ dot-config/
   starship.toml      Prompt
   worktrunk/         Git worktree manager
   yazi/              File manager
+dot-ssh/
+  config             SSH config (1Password agent, Gitpod host settings)
 dot-gitconfig        Git config (delta, SSH signing via 1Password)
 Brewfile             All homebrew dependencies
 macos/               macOS app preferences (restore with `defaults import`)
