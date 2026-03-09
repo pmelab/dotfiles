@@ -59,7 +59,6 @@ cask "1password"
 # Various apps
 cask "keepingyouawake"
 cask "raycast"
-cask "ollama-app"
 cask "brainfm"
 cask "display-pilot"
 cask "deskpad"
