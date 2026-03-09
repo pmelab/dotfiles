@@ -271,8 +271,7 @@ require("lazy").setup {
 			opts = {},
 		},
 		{
-			dir = vim.fn.expand("~/Code/review.nvim"),
-			name = "review.nvim",
+			"pmelab/review.nvim",
 			keys = function()
 				return require("review").lazy_keys()
 			end,
