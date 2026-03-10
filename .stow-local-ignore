@@ -2,8 +2,9 @@ npm
 nix
 bin
 .git
+.pi
 quartz
 quartz-config
 dot-claude/agents
 .gitignore
-AGENTS.md
+macos

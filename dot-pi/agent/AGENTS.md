@@ -1,0 +1,2 @@
+- be extremely concise. sacrifice grammar in favor of conciseness
+- prefer the gh cli tool over other means to work with github

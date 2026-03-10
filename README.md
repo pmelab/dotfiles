@@ -42,6 +42,9 @@ Stow uses the `--dotfiles` flag (configured in `.stowrc`), so `dot-config/` beco
 
 ```
 dot-agents/          AI agent skills lock file (~/.agents/)
+dot-pi/
+  agent/
+    AGENTS.md        Global pi agent instructions (~/.pi/agent/)
 dot-config/
   atuin/             Shell history with sync
   bat/               Cat replacement (Catppuccin theme)
@@ -162,6 +165,12 @@ gstop  → git commit --allow-empty -m '!stop'
 `gh-dash` is auto-installed/upgraded on shell start.
 
 `Ctrl+G` opens the command buffer in Neovim.
+
+## AI Agent Config
+
+A global `AGENTS.md` lives at `~/.pi/agent/AGENTS.md` (stowed from `dot-pi/agent/AGENTS.md`) and is loaded by pi in every session. It provides environment context (tools, shell, conventions) so the agent understands the local setup without per-project repetition.
+
+A project-level `.pi/AGENTS.md` contains dotfiles-specific instructions (ignored by stow via `.stow-local-ignore`).
 
 ## AI Agent Skills
 
