@@ -139,7 +139,7 @@ Plugin manager: **lazy.nvim** (stable branch). Config is a single `init.lua`.
 Highlights:
 
 - LSP via mason + nvim-lspconfig
-- conform.nvim for formatting (prettier, stylua; pint auto-detected per project)
+- conform.nvim for formatting (prettier, stylua, phpcbf)
 - flash.nvim, oil.nvim for navigation
 - nvim-cmp for completion
 - nvim-highlight-colors for inline color previews

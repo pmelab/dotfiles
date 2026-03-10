@@ -167,16 +167,9 @@ require("lazy").setup {
 					graphql = { "prettier" },
 					json = { "prettier" },
 					yaml = { "prettier" },
-					python = { "black" },
+
 					blade = { "blade-formatter" },
-					php = function(bufnr)
-						local fname = vim.api.nvim_buf_get_name(bufnr)
-						local root_dir = vim.fs.root(fname, "composer.json")
-						if root_dir and vim.fn.filereadable(root_dir .. "/vendor/bin/pint") == 1 then
-							return { "pint" }
-						end
-						return { "phpcbf" }
-					end,
+					php = { "phpcbf" },
 				},
 			format_on_save = {
 				timeout_ms = 3000,
@@ -193,14 +186,13 @@ require("lazy").setup {
 					"eslint-lsp",
 					"prettier",
 					"vtsls",
-					"pint",
+
 					"phpcbf",
 					"graphql-language-service-cli",
 					"tailwindcss-language-server",
 					"marksman",
 					"zk",
-					"pyright",
-					"black",
+
 					"blade-formatter",
 					"json-lsp",
 					"yaml-language-server",
@@ -671,9 +663,7 @@ require("lazy").setup {
 				-- Marksman LSP for all markdown files
 				vim.lsp.config("marksman", {})
 				vim.lsp.enable "marksman"
-				-- python
-				vim.lsp.config("pyright", {})
-				vim.lsp.enable "pyright"
+
 				-- json
 				vim.lsp.config("jsonls", {
 					settings = {
@@ -757,7 +747,7 @@ require("lazy").setup {
 						"mermaid",
 						"nix",
 						"php",
-						"python",
+
 						"scss",
 						"tsx",
 						"typescript",
