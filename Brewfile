@@ -1,3 +1,7 @@
+# Map app store
+
+brew "mas"
+
 # Lagoon/amazee.io
 tap "uselagoon/lagoon-cli"
 tap "pygmystack/pygmy"
@@ -66,3 +70,4 @@ cask "deskpad"
 cask "slack"
 cask "claude"
 cask "lm-studio"
+mas "Things 3", id: 904280696
