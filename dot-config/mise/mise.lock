@@ -28,6 +28,10 @@ url = "https://nodejs.org/dist/v25.4.0/node-v25.4.0-win-x64.zip"
 version = "0.57.1"
 backend = "npm:@mariozechner/pi-coding-agent"
 
+[[tools."npm:githingsdone"]]
+version = "0.0.0-dev.8d20eae"
+backend = "npm:githingsdone"
+
 [[tools."npm:yaml-language-server"]]
 version = "1.21.0"
 backend = "npm:yaml-language-server"
