@@ -1,0 +1,2 @@
+[commit.generation]
+command = """bash -c 'pi -p "$(cat)" 2>/dev/null'"""

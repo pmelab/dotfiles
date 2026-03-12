@@ -1,0 +1,38 @@
+[projects."/Users/pmelab/Code/moad"]
+approved-commands = [
+    "devbox services stop",
+    "direnv allow",
+    "pnpm install",
+    '''printf 'export WAKU_PORT=%s\nexport STORYBOOK_PORT=%s\n' '{{ ("waku-" ~ branch) | hash_port }}' '{{ ("sb-" ~ branch) | hash_port }}' > .ports.env''',
+    "source .ports.env && devbox services start",
+]
+
+[projects."github.com/amazeeio/moad"]
+approved-commands = [
+    "direnv allow",
+    "pnpm install",
+    '''printf 'export WAKU_PORT=%s\nexport STORYBOOK_PORT=%s\n' '{{ ("waku-" ~ branch) | hash_port }}' '{{ ("sb-" ~ branch) | hash_port }}' > .ports.env''',
+    "mise trust",
+    "mise trust -y",
+    '''printf '[env]\nWAKU_PORT=%s\nSTORYBOOK_PORT=%s\n' '{{ ("waku-" ~ branch) | hash_port }}' '{{ ("sb-" ~ branch) | hash_port }}' > mise.local.toml''',
+    "pitchfork restart",
+    "pitchfork restart --all",
+    '''printf '[env]\nAPI_PORT=%s\nSERVE_PORT=%s\nSTORYBOOK_PORT=%s\n' '{{ ("api-" ~ branch) | hash_port }}' '{{ ("serve-" ~ branch) | hash_port }}' '{{ ("sb-" ~ branch) | hash_port }}' > mise.local.toml''',
+    '''printf '[env]\nAPI_PORT=%s\nSERVE_PORT=%s\nSTORYBOOK_PORT=%s\nREDIS_PORT=%s\n' '{{ ("api-" ~ branch) | hash_port }}' '{{ ("serve-" ~ branch) | hash_port }}' '{{ ("sb-" ~ branch) | hash_port }}' '{{ ("redis-" ~ branch) | hash_port }}' > mise.local.toml''',
+]
+
+[projects."github.com/pmelab/gtd"]
+approved-commands = [
+    "mise trust -y",
+    "npm install",
+]
+
+[projects.moad]
+approved-commands = [
+    "direnv allow",
+    "pnpm install",
+    '''printf 'export WAKU_PORT=%s\nexport STORYBOOK_PORT=%s\n' '{{ ("waku-" ~ branch) | hash_port }}' '{{ ("sb-" ~ branch) | hash_port }}' > .ports.env''',
+    "source .ports.env && devbox services up -b",
+    "source .ports.env && devbox services up",
+    "source .ports.env && devbox services start",
+]
