@@ -1,2 +1,3 @@
 - be extremely concise. sacrifice grammar in favor of conciseness
 - prefer the gh cli tool over other means to work with github
+- my brave search api key is stored in $BRAVE_SEARCH_API_KEY
