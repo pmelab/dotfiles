@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/pmelab/gtd/main/schema.json",
   "_comment": "This is an example config. You can move this file to ~/.config/gtd/ or any other supported location.",
   "file": "TODO.md",
-  "modelPlan": "claude-sonnet-4-6",
+  "modelPlan": "claude-opus-4-6",
   "modelBuild": "claude-sonnet-4-6",
   "modelCommit": "claude-haiku-4-5",
   "testCmd": "true",
