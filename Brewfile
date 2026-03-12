@@ -35,6 +35,7 @@ cask "font-symbols-only-nerd-font"
 
 # Editing
 brew "nvim"
+brew "tree-sitter-cli"
 brew "uv"
 brew "marksman"
 

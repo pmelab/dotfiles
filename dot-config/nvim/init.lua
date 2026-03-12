@@ -731,36 +731,39 @@ require("lazy").setup {
 		},
 		{
 			"nvim-treesitter/nvim-treesitter",
-			init = function()
-				local opts = {
-					ensure_installed = {
-						"bash",
-						"css",
-						"fish",
-						"graphql",
-						"html",
-						"javascript",
-						"json",
-						"lua",
-						"markdown",
-						"markdown_inline",
-						"mermaid",
-						"nix",
-						"php",
-
-						"scss",
-						"tsx",
-						"typescript",
-						"vim",
-						"vimdoc",
-						"yaml",
-						"gitcommit",
-					},
-					highlight = {
-						enable = true,
-					},
-				}
-				require("nvim-treesitter.configs").setup(opts)
+			lazy = false,
+			build = ":TSUpdate",
+			config = function()
+				require("nvim-treesitter").setup({
+					install_dir = vim.fn.stdpath("data") .. "/site",
+				})
+				require("nvim-treesitter").install({
+					"bash",
+					"css",
+					"fish",
+					"graphql",
+					"html",
+					"javascript",
+					"json",
+					"lua",
+					"markdown",
+					"markdown_inline",
+					"mermaid",
+					"nix",
+					"php",
+					"scss",
+					"tsx",
+					"typescript",
+					"vim",
+					"vimdoc",
+					"yaml",
+					"gitcommit",
+				})
+				vim.api.nvim_create_autocmd("FileType", {
+					callback = function()
+						pcall(vim.treesitter.start)
+					end,
+				})
 			end,
 		},
 		{
