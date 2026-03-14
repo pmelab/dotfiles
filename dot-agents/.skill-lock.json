@@ -19,6 +19,33 @@
       "skillFolderHash": "c2f31172b6f256272305a5e6e7228b258446899f",
       "installedAt": "2026-03-10T03:47:27.575Z",
       "updatedAt": "2026-03-10T03:47:27.575Z"
+    },
+    "stripe-webhooks": {
+      "source": "hookdeck/webhook-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/hookdeck/webhook-skills.git",
+      "skillPath": "skills/stripe-webhooks/SKILL.md",
+      "skillFolderHash": "3d72f6481be083b8f5cf087776758e547585cc5f",
+      "installedAt": "2026-03-12T15:18:49.170Z",
+      "updatedAt": "2026-03-12T15:18:49.170Z"
+    },
+    "stripe-integration": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/wshobson/agents.git",
+      "skillPath": "plugins/payment-processing/skills/stripe-integration/SKILL.md",
+      "skillFolderHash": "9138bbf27b0c85b2bebf11ad7621587870db3894",
+      "installedAt": "2026-03-12T15:18:49.237Z",
+      "updatedAt": "2026-03-12T15:18:49.237Z"
+    },
+    "stripe-best-practices": {
+      "source": "anthropics/claude-plugins-official",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/claude-plugins-official.git",
+      "skillPath": "external_plugins/stripe/skills/stripe-best-practices/SKILL.md",
+      "skillFolderHash": "8e5f5b2dc4faf807852322e15c2d6f0240f52039",
+      "installedAt": "2026-03-12T15:18:49.401Z",
+      "updatedAt": "2026-03-12T15:18:49.401Z"
     }
   },
   "dismissed": {
