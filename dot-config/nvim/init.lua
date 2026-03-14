@@ -66,6 +66,7 @@ vim.opt.expandtab = true -- Use spaces instead of tabs
 vim.diagnostic.config { virtual_text = false }
 
 -- Clear search highlights with escape.
+vim.keymap.set({ "n", "i", "v", "t", "c" }, "<M-u>", "<Nop>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "<Esc>", ":noh<CR>", { noremap = true, silent = true })
 
 -- Make sure we can use ESC to exit terminal mode.
